@@ -1,11 +1,14 @@
 import React from "react";
+import { connect} from "react-redux";
 import PropTypes from "prop-types";
-import axios from "axios";
+
+import { register } from "../../actions/auth";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Icon from "@material-ui/core/Icon";
+import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
@@ -25,52 +28,78 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 
 import registerPageStyle from "assets/jss/material-dashboard-react/views/registerPageStyle.jsx";
-
-const { REACT_APP_SERVER_URL } = process.env;
-
 class RegisterPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+  
+    state = {
       checked: [],
-      errors: {}
+      errors: {},
+      first_name : '',
+      middle_name : '',
+      last_name: '',
+      username: '',
+      email: '',
+      phone_number: '',
+      role_id: '',
+      status: true
     };
+
+    static propTypes = {
+      isAuthenticated : PropTypes.bool,
+      error : PropTypes.object.isRequired,
+      classes: PropTypes.object.isRequired,
+      history: PropTypes.object,
+      register: PropTypes.func.isRequired
+
+    }
+
+    componentDidUpdate(prevProps) {
+      const { error} = this.props;
+
+      if(error !== prevProps.error) {
+        if(error.id === 'REGISTER_FAIL') {
+          this.setState({ message : error.error })
+        } else {
+          this.setState({ message : null})
+        }
+
+      }
+    }
+
+  // roleOptions = [
+  //     { key: "1", value: "Business_Owner", text: "Business Owner" },
+  //     { key: "2", value: "Reviewer", text: "Reviewer" }
+  // ];
+
+  // handleRoleChange =  value  => {
+  //   const { key } = roleOptions.find(o => o.value === value);
+  //   setRole(key);
+  // };
+
+  handleChange = e => {
+    this.setState( { [e.target.name]: [e.targe.value]})
   }
+
   register = async e => {
     e.preventDefault();
 
-    const { history } = this.props;
+    const {first_name, middle_name, last_name, username, email, phone_number, status, password} = this.state;
 
-    const fields = ["name", "username", "password"];
-    const formElements = e.target.elements;
-
-    const formValues = fields
-      .map(field => ({
-        [field]: formElements.namedItem(field).value
-      }))
-      .reduce((current, next) => ({ ...current, ...next }));
-
-    let registerRequest;
-    try {
-      registerRequest = await axios.post(
-        `http://${REACT_APP_SERVER_URL}/register`,
-        {
-          ...formValues
-        }
-      );
-    } catch ({ response }) {
-      registerRequest = response;
-    }
-    const { data: registerRequestData } = registerRequest;
-    if (registerRequestData.success) {
-      return history.push("/login");
+    const newUser = {
+      first_name,
+      middle_name,
+      last_name,
+      username,
+      email,
+      phone_number,
+      status,
+      password
     }
 
-    this.setState({
-      errors:
-        registerRequestData.messages && registerRequestData.messages.errors
-    });
+    //attempt to register client
+    this.props.register(newUser);
+
   };
+
   handleToggle = value => {
     const { checked } = this.state;
     const currentIndex = checked.indexOf(value);
@@ -86,6 +115,7 @@ class RegisterPage extends React.Component {
       checked: newChecked
     });
   };
+
   render() {
     const { classes } = this.props;
     const { errors } = this.state;
@@ -121,16 +151,34 @@ class RegisterPage extends React.Component {
                 </CardHeader>
                 <CardBody>
                   <p className={classes.cardDescription}>Or Be Classical</p>
+                
                   <CustomInput
-                    labelText="Name..."
-                    id="name"
+                    labelText="First Name..."
+                    id="first_name"
                     formControlProps={{
                       fullWidth: true,
                       className: classes.formControlClassName
                     }}
                     inputProps={{
                       required: true,
-                      name: "name",
+                      name: "first_name",
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Face className={classes.inputAdornmentIcon} />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                  <CustomInput
+                    labelText="Middle Name..."
+                    id="middle_name"
+                    formControlProps={{
+                      fullWidth: true,
+                      className: classes.formControlClassName
+                    }}
+                    inputProps={{
+                      required: true,
+                      name: "middle_name",
                       endAdornment: (
                         <InputAdornment position="end">
                           <Face className={classes.inputAdornmentIcon} />
@@ -153,6 +201,50 @@ class RegisterPage extends React.Component {
                       endAdornment: (
                         <InputAdornment position="end">
                           <Email className={classes.inputAdornmentIcon} />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                  <CustomInput
+                    labelText="Phone Number..."
+                    id="phone_number"
+                    formControlProps={{
+                      fullWidth: true,
+                      className: classes.formControlClassName
+                    }}
+                    inputProps={{
+                      required: true,
+                      name: "phone_number",
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Face className={classes.inputAdornmentIcon} />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                  <Select
+                      clearable
+                      fluid
+                      search
+                      selection
+                      // options={roleOptions}
+                      placeholder="Role"
+                      // onChange={handleRoleChange}
+                    />
+
+                  <CustomInput
+                    labelText="Username..."
+                    id="username"
+                    formControlProps={{
+                      fullWidth: true,
+                      className: classes.formControlClassName
+                    }}
+                    inputProps={{
+                      required: true,
+                      name: "username",
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Face className={classes.inputAdornmentIcon} />
                         </InputAdornment>
                       )
                     }}
@@ -220,9 +312,13 @@ class RegisterPage extends React.Component {
   }
 }
 
-RegisterPage.propTypes = {
-  classes: PropTypes.object.isRequired,
-  history: PropTypes.object
-};
+const mapStateToProps = state => ({
+  isAuthenticated : state.auth.isAuthenticated,
+  error : state.error
+})
 
-export default withStyles(registerPageStyle)(RegisterPage);
+export default connect(
+  mapStateToProps,
+  { register}
+)(withStyles(registerPageStyle)(RegisterPage));
+

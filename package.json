@@ -5,27 +5,32 @@
   "private": false,
   "main": "dist/index.js",
   "dependencies": {
-    "@material-ui/core": "3.9.2",
-    "@material-ui/icons": "3.0.2",
-    "axios": "^0.18.0",
+    "@material-ui/core": "^4.12.3",
+    "@material-ui/icons": "^4.11.2",
+    "axios": "^0.21.1",
     "chartist": "0.10.1",
     "classnames": "2.2.6",
+    "eslint": "^7.32.0",
+    "eslint-plugin-prettier": "^3.4.0",
     "history": "4.7.2",
     "perfect-scrollbar": "1.4.0",
-    "prettier": "1.16.4",
+    "prettier": "^2.3.2",
     "prop-types": "15.7.1",
     "react": "16.8.1",
     "react-chartist": "0.13.3",
     "react-dom": "16.8.1",
     "react-github-button": "^0.1.11",
-    "react-google-maps": "9.4.5",
+    "react-google-maps": "^9.4.5",
     "react-redux": "^7.2.4",
     "react-router-dom": "4.3.1",
-    "react-scripts": "2.1.5",
+    "react-scripts": "^4.0.3",
     "react-share": "^2.4.0",
     "react-swipeable-views": "0.13.1",
     "redux": "^4.1.1",
-    "serve": "11.0.0"
+    "redux-devtools-extension": "^2.13.9",
+    "redux-persist": "^6.0.0",
+    "redux-thunk": "^2.3.0",
+    "serve": "^11.3.2"
   },
   "scripts": {
     "start": "yarn pm2 start",
@@ -63,6 +68,8 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "devDependencies": {},
-  "proxy": "http://localhost:3000"
+  "proxy": "http://localhost:3000",
+  "devDependencies": {
+    "eslint-config-prettier": "^8.3.0"
+  }
 }

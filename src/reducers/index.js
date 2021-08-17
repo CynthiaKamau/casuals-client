@@ -4,7 +4,6 @@ import itemReducer from './item';
 import { combineReducers } from 'redux';
 
 export default combineReducers({
-    item : itemReducer,
     error : error,
     auth : auth
 })

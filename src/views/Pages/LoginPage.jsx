@@ -33,7 +33,10 @@ class LoginPage extends React.Component {
     super(props);
     this.state = {
       checked: [],
-      errors: {}
+      errors: {},
+      phone_number: '',
+      password: '',
+      message: null
     };
   }
 

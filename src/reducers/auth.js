@@ -4,7 +4,8 @@ import { LOGIN_SUCCESS,
         REGISTER_FAIL,
         USER_FETCH_REQUEST,
         USER_FETCHED, 
-        AUTH_ERROR} from '../actions/types';
+        AUTH_ERROR,
+        LOGOUT } from '../actions/types';
 
 const initialState = {
     token : localStorage.getItem('token'),
@@ -20,6 +21,7 @@ export default function(state = initialState, action) {
                 isLoading : true,
             }
         case LOGIN_SUCCESS :
+            localStorage.setItem('token', action.payload.message.token)
             return {
                 ...state, 
                 isAuthenticated : true,
@@ -54,7 +56,7 @@ export default function(state = initialState, action) {
                 user : null
             }
 
-        default : state;
+        default : return state;
 
     }
 
