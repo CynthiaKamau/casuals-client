@@ -102,10 +102,17 @@ class FixedPlugin extends Component {
                   />
                 </div>
               </a>
+<<<<<<< HEAD
             </li>
             <li className="header-title">Images</li>
             <li className={this.state["bgImage"] === imagine1 ? "active" : ""}>
               <a
+=======
+            </li> */}
+            <li className="header-title">Images</li>
+            {/* <li className={this.state["bgImage"] === imagine1 ? "active" : ""}>
+              <a href={() => false}
+>>>>>>> f142eae694cfdec16f827e71c5efd066303190ba
                 className="img-holder switch-trigger"
                 onClick={() => {
                   this.setState({ bgImage: imagine1 });
@@ -114,9 +121,15 @@ class FixedPlugin extends Component {
               >
                 <img src={imagine1} alt="..." />
               </a>
+<<<<<<< HEAD
             </li>
             <li className={this.state["bgImage"] === imagine2 ? "active" : ""}>
               <a
+=======
+            </li> */}
+            <li className={this.state["bgImage"] === imagine2 ? "active" : ""}>
+              <a href="/#"
+>>>>>>> f142eae694cfdec16f827e71c5efd066303190ba
                 className="img-holder switch-trigger"
                 onClick={() => {
                   this.setState({ bgImage: imagine2 });
@@ -127,7 +140,11 @@ class FixedPlugin extends Component {
               </a>
             </li>
             <li className={this.state["bgImage"] === imagine3 ? "active" : ""}>
+<<<<<<< HEAD
               <a
+=======
+              <a href="/#"
+>>>>>>> f142eae694cfdec16f827e71c5efd066303190ba
                 className="img-holder switch-trigger"
                 onClick={() => {
                   this.setState({ bgImage: imagine3 });
@@ -138,7 +155,11 @@ class FixedPlugin extends Component {
               </a>
             </li>
             <li className={this.state["bgImage"] === imagine4 ? "active" : ""}>
+<<<<<<< HEAD
               <a
+=======
+              <a href="/#"
+>>>>>>> f142eae694cfdec16f827e71c5efd066303190ba
                 className="img-holder switch-trigger"
                 onClick={() => {
                   this.setState({ bgImage: imagine4 });

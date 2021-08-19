@@ -20,12 +20,19 @@ export const loadUser = (dispatch, getState) => {
         type : USER_FETCHED,
         payload : res
     }))
+<<<<<<< HEAD
     .catch(error => {
         // dispatch(setError(error.response.error, error.response.status)),
         dispatch({
         type: AUTH_ERROR
         });
     });
+=======
+    .catch(error => dispatch({ setError() }),
+        dispatch({
+        type : AUTH_ERROR,
+    }))
+>>>>>>> f142eae694cfdec16f827e71c5efd066303190ba
 
 }
 
@@ -45,10 +52,18 @@ export const register = ({ first_name, middle_name, last_name, username, phone_n
         type : REGISTER_SUCCESS,
         payload : res
     }) )
+<<<<<<< HEAD
     .catch(error => {
         // dispatch({ type : REGISTER_FAIL}),
         dispatch(setError(error.response.data, error.response.status, 'REGISTER_FAIL'))
     });
+=======
+    .catch(error => dispatch({
+        type : REGISTER_FAIL,
+    }),
+    dispatch(returnErrors(error.response.data, error.response.status, 'REGISTER_FAIL'))
+    )
+>>>>>>> f142eae694cfdec16f827e71c5efd066303190ba
 }
 
 export const tokenConfig = getState => {
