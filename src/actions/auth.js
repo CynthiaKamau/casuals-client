@@ -30,7 +30,7 @@ export const loadUser = (dispatch, getState) => {
 }
 
 //register
-export const register = ({ first_name, middle_name, last_name, username, phone_number, email, password, status}) => (dispatch) => {
+export const register = ({ first_name, middle_name, last_name, username, phone_number, email, role_id, password, status}) => (dispatch) => {
 
     const config = {
         headers : {
@@ -38,17 +38,44 @@ export const register = ({ first_name, middle_name, last_name, username, phone_n
         }
     }
 
-    const body = JSON.stringify({ first_name, middle_name, last_name, username, phone_number, email, password, status });
+    const body = JSON.stringify({ first_name, middle_name, last_name, username, phone_number, email, role_id, password, status });
 
     axios.post('/client', body, config)
     .then(res => dispatch({
         type : REGISTER_SUCCESS,
         payload : res
     }) )
-    .catch(error => {
-        // dispatch({ type : REGISTER_FAIL}),
-        dispatch(setError(error.response.data, error.response.status, 'REGISTER_FAIL'))
-    });
+    .catch(error => dispatch(setError(error.message, error.status, 'REGISTER_FAIL')),
+        dispatch({ type : REGISTER_FAIL}),
+    );
+}
+
+//login
+export const login = ({ phone_number, password}) => (dispatch) => {
+
+    const config = {
+        headers : {
+            'Content-Type' : 'application/json'
+        }
+    }
+
+    const body = JSON.stringify({ phone_number, password});
+
+    axios.post('/user/login', body, config)
+    .then(res => dispatch({
+        type : LOGIN_SUCCESS,
+        payload : res.data}))
+    .catch(error => dispatch(setError(error.message, error.status, 'LOGIN_FAIL')),
+        dispatch({ type : LOGIN_FAIL})
+    );
+
+}
+
+//logout
+export const logout = () => {
+    return {
+        type: LOGOUT
+    }
 }
 
 export const tokenConfig = getState => {

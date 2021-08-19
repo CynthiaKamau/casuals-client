@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import axios from "axios";
+import { connect} from "react-redux";
+
+import { login } from "../../actions/auth";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -25,53 +27,40 @@ import CardFooter from "components/Card/CardFooter.jsx";
 
 import loginPageStyle from "assets/jss/material-dashboard-react/views/loginPageStyle.jsx";
 
-const { REACT_APP_SERVER_URL } = process.env;
-
 class LoginPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      checked: [],
-      errors: {}
-    };
+  
+  state = {
+    phone_number: '',
+    password: ''
   }
+
+  static propTypes = {
+    isAuthenticated : PropTypes.bool,
+    error : PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired,
+    history: PropTypes.object,
+    login: PropTypes.func.isRequired,
+    // clearError : PropTypes.func.isRequired
+  }
+
+  handlePNChange = e => {this.setState( { phone_number: e.target.value}) }
+  handlePWChange = e => {this.setState( { password: e.target.value}) }
+
   login = async e => {
+
     e.preventDefault();
 
-    const { history } = this.props;
+    const {phone_number, password} = this.state;
 
-    const fields = ["username", "password"];
-    const formElements = e.target.elements;
-
-    const formValues = fields
-      .map(field => ({
-        [field]: formElements.namedItem(field).value
-      }))
-      .reduce((current, next) => ({ ...current, ...next }));
-
-    let loginRequest;
-    try {
-      loginRequest = await axios.post(
-        `http://${REACT_APP_SERVER_URL}/login`,
-        {
-          ...formValues
-        },
-        {
-          withCredentials: true
-        }
-      );
-    } catch ({ response }) {
-      loginRequest = response;
-    }
-    const { data: loginRequestData } = loginRequest;
-    if (loginRequestData.success) {
-      return history.push("/dashboard");
+    const User = {
+      phone_number,
+      password
     }
 
-    this.setState({
-      errors: loginRequestData.messages && loginRequestData.messages.errors
-    });
-  };
+    //attempt to login
+    this.props.login(User);
+  }
+
   handleToggle = value => {
     const { checked } = this.state;
     const currentIndex = checked.indexOf(value);
@@ -87,6 +76,7 @@ class LoginPage extends React.Component {
       checked: newChecked
     });
   };
+
   render() {
     const { classes } = this.props;
     const { errors } = this.state;
@@ -136,16 +126,17 @@ class LoginPage extends React.Component {
                     password <strong>secret</strong>{" "}
                   </p>
                   <CustomInput
-                    labelText="Email..."
-                    id="email"
-                    error={errors.username || errors.invalidEmailOrPassword}
+                    labelText="Phone Number..."
+                    id="phone_number"
                     formControlProps={{
                       fullWidth: true,
                       className: classes.formControlClassName
                     }}
                     inputProps={{
                       required: true,
-                      name: "username",
+                      name: "phone_number",
+                      value:this.state.phone_number,
+                      onChange:this.handlePNChange,
                       endAdornment: (
                         <InputAdornment position="end">
                           <Email className={classes.inputAdornmentIcon} />
@@ -156,7 +147,6 @@ class LoginPage extends React.Component {
                   <CustomInput
                     labelText="Password"
                     id="password"
-                    error={errors.password || errors.invalidEmailOrPassword}
                     formControlProps={{
                       fullWidth: true,
                       className: classes.formControlClassName
@@ -164,6 +154,9 @@ class LoginPage extends React.Component {
                     inputProps={{
                       type: "password",
                       required: true,
+                      name:"password",
+                      value:this.state.password,
+                      onChange:this.handlePWChange, 
                       endAdornment: (
                         <InputAdornment position="end">
                           <Icon className={classes.inputAdornmentIcon}>
@@ -173,7 +166,7 @@ class LoginPage extends React.Component {
                       )
                     }}
                   />
-                  <FormControlLabel
+                  {/* <FormControlLabel
                     classes={{
                       root:
                         classes.checkboxLabelControl +
@@ -194,7 +187,7 @@ class LoginPage extends React.Component {
                       />
                     }
                     label={<span>Remember me</span>}
-                  />
+                  /> */}
                 </CardBody>
                 <CardFooter className={classes.justifyContentCenter}>
                   <Button type="submit" color="primary" simple size="lg" block>
@@ -210,10 +203,12 @@ class LoginPage extends React.Component {
   }
 }
 
-LoginPage.propTypes = {
-  classes: PropTypes.object.isRequired,
-  history: PropTypes.object,
-  errors: PropTypes.object
-};
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error
+})
 
-export default withStyles(loginPageStyle)(LoginPage);
+export default connect(
+  mapStateToProps,
+  {login}
+)(withStyles(loginPageStyle)(LoginPage));

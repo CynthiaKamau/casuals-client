@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { createBrowserHistory } from "history";
 import { store } from "./store";
+import axios from "axios";
 
 import { Router, Route, Switch, Redirect } from "react-router-dom";
 
@@ -14,6 +15,10 @@ import RTL from "layouts/RTL.jsx";
 import "assets/css/material-dashboard-react.css?v=1.6.0";
 
 const hist = createBrowserHistory();
+
+const { REACT_APP_SERVER_URL } = process.env;
+
+  axios.defaults.baseURL = `http://${REACT_APP_SERVER_URL}/api`;
 
 ReactDOM.render(
   <Provider store={store}>

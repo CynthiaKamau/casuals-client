@@ -8,9 +8,9 @@ import { register } from "../../actions/auth";
 import withStyles from "@material-ui/core/styles/withStyles";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Icon from "@material-ui/core/Icon";
-import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Snackbar from "@material-ui/core/Snackbar";
 
 // @material-ui/icons
 import Email from "@material-ui/icons/Email";
@@ -48,8 +48,8 @@ class RegisterPage extends React.Component {
       error : PropTypes.object.isRequired,
       classes: PropTypes.object.isRequired,
       history: PropTypes.object,
-      register: PropTypes.func.isRequired
-
+      register: PropTypes.func.isRequired,
+      // clearError : PropTypes.func.isRequired
     }
 
     componentDidUpdate(prevProps) {
@@ -57,7 +57,7 @@ class RegisterPage extends React.Component {
 
       if(error !== prevProps.error) {
         if(error.id === 'REGISTER_FAIL') {
-          this.setState({ message : error.error })
+          this.setState({ message : error.message })
         } else {
           this.setState({ message : null})
         }
@@ -65,14 +65,18 @@ class RegisterPage extends React.Component {
       }
     }
 
-  handleChange = e => {
-    this.setState( { [e.target.name]: [e.targe.value]})
-  }
+  handleFNameChange = e => {this.setState( { first_name: e.target.value}) }
+  handleMNameChange = e => {this.setState( { middle_name: e.target.value}) }
+  handleLNameChange = e => {this.setState( { last_name: e.target.value}) }
+  handleEmailNameChange = e => {this.setState( { email: e.target.value}) }
+  handlePnNameChange = e => {this.setState( { phone_number: e.target.value}) }
+  handleUnNameChange = e => {this.setState( { username: e.target.value}) }
+  handlePwNameChange = e => {this.setState( { password: e.target.value}) }
 
   register = async e => {
     e.preventDefault();
 
-    const {first_name, middle_name, last_name, username, email, phone_number, status, password} = this.state;
+    const {first_name, middle_name, last_name, username, email, phone_number, role_id,status, password} = this.state;
 
     const newUser = {
       first_name,
@@ -81,6 +85,7 @@ class RegisterPage extends React.Component {
       username,
       email,
       phone_number,
+      role_id,
       status,
       password
     }
@@ -140,11 +145,11 @@ class RegisterPage extends React.Component {
                   </div>
                 </CardHeader>
                 <CardBody>
-                  <p className={classes.cardDescription}>Or Be Classical</p>
+                  { this.state.message ? <p color="danger"></p> : null }
                 
                   <CustomInput
                     labelText="First Name..."
-                    id="first_name"
+                    id="first_name"                    
                     formControlProps={{
                       fullWidth: true,
                       className: classes.formControlClassName
@@ -152,6 +157,8 @@ class RegisterPage extends React.Component {
                     inputProps={{
                       required: true,
                       name: "first_name",
+                      value: this.state.first_name,
+                      onChange :this.handleFNameChange,
                       endAdornment: (
                         <InputAdornment position="end">
                           <Face className={classes.inputAdornmentIcon} />
@@ -167,8 +174,28 @@ class RegisterPage extends React.Component {
                       className: classes.formControlClassName
                     }}
                     inputProps={{
-                      required: true,
                       name: "middle_name",
+                      value:this.state.middle_name,
+                      onChange:this.handleMNameChange,
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Face className={classes.inputAdornmentIcon} />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                  <CustomInput
+                    labelText="Last Name..."
+                    id="last_name"
+                    formControlProps={{
+                      fullWidth: true,
+                      className: classes.formControlClassName
+                    }}
+                    inputProps={{
+                      required: true,
+                      name: "last_name",
+                      value:this.state.last_name,
+                      onChange:this.handleLNameChange,
                       endAdornment: (
                         <InputAdornment position="end">
                           <Face className={classes.inputAdornmentIcon} />
@@ -187,7 +214,9 @@ class RegisterPage extends React.Component {
                     inputProps={{
                       required: true,
                       type: "email",
-                      name: "username",
+                      name: "email",
+                      value:this.state.email,
+                      onChange:this.handleEmailNameChange,
                       endAdornment: (
                         <InputAdornment position="end">
                           <Email className={classes.inputAdornmentIcon} />
@@ -205,6 +234,8 @@ class RegisterPage extends React.Component {
                     inputProps={{
                       required: true,
                       name: "phone_number",
+                      value:this.state.phone_number,
+                      onChange:this.handlePnNameChange,
                       endAdornment: (
                         <InputAdornment position="end">
                           <Face className={classes.inputAdornmentIcon} />
@@ -223,6 +254,8 @@ class RegisterPage extends React.Component {
                     inputProps={{
                       required: true,
                       name: "username",
+                      value:this.state.username,
+                      onChange:this.handleUnNameChange,
                       endAdornment: (
                         <InputAdornment position="end">
                           <Face className={classes.inputAdornmentIcon} />
@@ -242,6 +275,8 @@ class RegisterPage extends React.Component {
                       required: true,
                       name: "password",
                       type: "password",
+                      value:this.state.password,
+                      onChange:this.handlePwNameChange, 
                       endAdornment: (
                         <InputAdornment position="end">
                           <Icon className={classes.inputAdornmentIcon}>

@@ -1,7 +1,11 @@
 import React from "react";
 import classNames from "classnames";
 import { NavLink } from "react-router-dom";
-import axios from "axios";
+
+import { logout } from "../../actions/auth";
+import { connect} from "react-redux";
+import PropTypes from "prop-types";
+
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -21,10 +25,12 @@ import CustomInput from "components/CustomInput/CustomInput.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 
 import headerLinksStyle from "assets/jss/material-dashboard-react/components/headerLinksStyle.jsx";
-
-const { REACT_APP_SERVER_URL } = process.env;
-
 class HeaderLinks extends React.Component {
+
+  static propTypes = {
+    logout: PropTypes.func.isRequired
+  }
+
   state = {
     open: false,
     profilePopupOpen: false,
@@ -44,24 +50,6 @@ class HeaderLinks extends React.Component {
 
     this.setState({ open: false, profilePopupOpen: false });
   };
-
-  logout = async () => {
-    const { history } = this.props;
-    let logoutRequest;
-    try {
-      logoutRequest = await axios.post(
-        `http://${REACT_APP_SERVER_URL}/logout`, {}, {
-          withCredentials: true
-        }
-      );
-    } catch ({ request }) {
-      
-      logoutRequest = request;
-    }
-    if (logoutRequest.status === 301) {
-      history.push('/auth/login-page');
-    }
-  }
 
   render() {
     const { classes } = this.props;
@@ -243,7 +231,7 @@ class HeaderLinks extends React.Component {
                         Support
                       </MenuItem>
                       <MenuItem
-                        onClick={this.logout}
+                        onClick={this.props.logout}
                         className={classes.dropdownItem}
                       >
                         Logout
@@ -260,4 +248,11 @@ class HeaderLinks extends React.Component {
   }
 }
 
-export default withStyles(headerLinksStyle)(HeaderLinks);
+const mapStateToProps = state => ({
+  isAuthenticated : state.auth.isAuthenticated,
+  error : state.error
+})
+export default connect(
+  mapStateToProps,
+  { logout }
+)(withStyles(headerLinksStyle)(HeaderLinks));
