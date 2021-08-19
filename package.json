@@ -18,29 +18,16 @@
     "react-chartist": "0.13.3",
     "react-dom": "16.8.1",
     "react-github-button": "^0.1.11",
-<<<<<<< HEAD
     "react-google-maps": "9.4.5",
     "react-redux": "^7.2.4",
     "react-router-dom": "4.3.1",
     "react-scripts": "2.1.5",
-=======
-    "react-google-maps": "^9.4.5",
-    "react-redux": "^7.2.4",
-    "react-router-dom": "4.3.1",
-    "react-scripts": "^4.0.3",
->>>>>>> f142eae694cfdec16f827e71c5efd066303190ba
     "react-share": "^2.4.0",
     "react-swipeable-views": "0.13.1",
     "redux": "^4.1.1",
     "redux-devtools-extension": "^2.13.9",
-<<<<<<< HEAD
     "redux-thunk": "^2.3.0",
     "serve": "11.0.0"
-=======
-    "redux-persist": "^6.0.0",
-    "redux-thunk": "^2.3.0",
-    "serve": "^11.3.2"
->>>>>>> f142eae694cfdec16f827e71c5efd066303190ba
   },
   "scripts": {
     "start": "yarn pm2 start",
@@ -78,12 +65,5 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-<<<<<<< HEAD
   "devDependencies": {}
-=======
-  "proxy": "http://localhost:3000",
-  "devDependencies": {
-    "eslint-config-prettier": "^8.3.0"
-  }
->>>>>>> f142eae694cfdec16f827e71c5efd066303190ba
 }
