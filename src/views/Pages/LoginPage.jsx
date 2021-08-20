@@ -3,17 +3,15 @@ import PropTypes from "prop-types";
 import { connect} from "react-redux";
 
 import { login } from "../../actions/auth";
+import { clearError } from "../../actions/error";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Icon from "@material-ui/core/Icon";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 // @material-ui/icons
 import Phone from "@material-ui/icons/Phone";
-import Check from "@material-ui/icons/Check";
 import SnackbarContent from "components/Snackbar/SnackbarContent.jsx";
 
 // core components
@@ -41,7 +39,7 @@ class LoginPage extends React.Component {
     classes: PropTypes.object.isRequired,
     history: PropTypes.object,
     login: PropTypes.func.isRequired,
-    // clearError : PropTypes.func.isRequired
+    clearError : PropTypes.func.isRequired
   }
 
   componentDidUpdate(prevProps) {
@@ -52,6 +50,7 @@ class LoginPage extends React.Component {
         this.setState({ message : error.message })
       } else {
         this.setState({ message : null})
+
       }
 
     }
@@ -63,6 +62,8 @@ class LoginPage extends React.Component {
   login = async e => {
 
     e.preventDefault();
+
+    this.props.clearError();
 
     const {phone_number, password} = this.state;
 
@@ -140,7 +141,7 @@ class LoginPage extends React.Component {
                     password <strong>secret</strong>{" "}
                   </p>
 
-                  { this.state.message ? <SnackbarContent message={this.state.message} close /> : null }
+                  { this.state.message ? <SnackbarContent color="warning" message={this.state.message} close /> : null }
 
                   <CustomInput
                     labelText="Phone Number..."
@@ -227,5 +228,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  {login}
+  {login, clearError}
 )(withStyles(loginPageStyle)(LoginPage));

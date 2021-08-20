@@ -3,6 +3,7 @@ import { connect} from "react-redux";
 import PropTypes from "prop-types";
 
 import { register } from "../../actions/auth";
+import { clearError } from "../../actions/error";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -50,7 +51,7 @@ class RegisterPage extends React.Component {
       classes: PropTypes.object.isRequired,
       history: PropTypes.object,
       register: PropTypes.func.isRequired,
-      // clearError : PropTypes.func.isRequired
+      clearError : PropTypes.func.isRequired
     }
 
     componentDidUpdate(prevProps) {
@@ -76,6 +77,8 @@ class RegisterPage extends React.Component {
 
   register = async e => {
     e.preventDefault();
+
+    this.props.clearError();
 
     const {first_name, middle_name, last_name, username, email, phone_number, role_id,status, password} = this.state;
 
@@ -114,7 +117,6 @@ class RegisterPage extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { errors } = this.props.error;
 
     return (
       <div className={classes.container}>
@@ -148,7 +150,7 @@ class RegisterPage extends React.Component {
                 </CardHeader>
                 <CardBody>
 
-                  { this.state.message ? <SnackbarContent message={this.state.message} close /> : null }
+                { this.state.message ? <SnackbarContent color="warning" message={this.state.message} close /> : null }
                 
                   <CustomInput
                     labelText="First Name..."
@@ -336,6 +338,6 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { register}
+  { register, clearError}
 )(withStyles(registerPageStyle)(RegisterPage));
 
