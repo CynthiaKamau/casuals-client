@@ -25,7 +25,6 @@ import CustomInput from "components/CustomInput/CustomInput.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 
 import headerLinksStyle from "assets/jss/material-dashboard-react/components/headerLinksStyle.jsx";
-import { useRef } from "react";
 class HeaderLinks extends React.Component {
 
   static propTypes = {

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setError, clearError } from './error';
+import { setError } from './error';
 import { LOGIN_SUCCESS,
     LOGIN_FAIL,
     REGISTER_SUCCESS,

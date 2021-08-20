@@ -1,6 +1,10 @@
-import React from "react";
+import React , {useEffect} from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
+
+import { connect } from "react-redux";
+import { getClients } from "../../actions/items";
+
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -8,6 +12,7 @@ import Table from "components/Table/Table.jsx";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
+import { useState } from "react";
 
 const styles = {
   cardCategoryWhite: {
@@ -22,6 +27,7 @@ const styles = {
       color: "#FFFFFF"
     }
   },
+  
   cardTitleWhite: {
     color: "#FFFFFF",
     marginTop: "0px",
@@ -39,8 +45,15 @@ const styles = {
   }
 };
 
-function JobList(props) {
+function ClientList(props) {
   const { classes } = props;
+
+  const [clients, setClients] = useState("");
+  
+  useEffect(() => {
+    getClients();
+  }, []);
+
   return (
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>
@@ -109,4 +122,17 @@ function JobList(props) {
   );
 }
 
-export default withStyles(styles)(JobList);
+const mapDispatchToProps = dispatch => {
+  return {
+      getClients: () => dispatch(getClients())
+  }
+}
+
+const mapStateToProps = state => ({
+  items : state.items
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(ClientList));
