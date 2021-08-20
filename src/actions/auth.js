@@ -43,7 +43,7 @@ export const register = ({ first_name, middle_name, last_name, username, phone_n
     axios.post('/client', body, config)
     .then(res => dispatch({
         type : REGISTER_SUCCESS,
-        payload : res
+        payload : res.data
     }) )
     .catch(error => dispatch(setError(error.message, error.status, 'REGISTER_FAIL')),
         dispatch({ type : REGISTER_FAIL}),

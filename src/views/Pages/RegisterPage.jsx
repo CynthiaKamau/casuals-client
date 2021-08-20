@@ -10,13 +10,14 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Icon from "@material-ui/core/Icon";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Snackbar from "@material-ui/core/Snackbar";
+import SnackbarContent from "components/Snackbar/SnackbarContent.jsx";
 
 // @material-ui/icons
 import Email from "@material-ui/icons/Email";
 import Check from "@material-ui/icons/Check";
 import Face from "@material-ui/icons/Face";
-
+import Phone from "@material-ui/icons/Phone";
+import DoneIcon from '@material-ui/icons/Done';
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
@@ -113,7 +114,8 @@ class RegisterPage extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { errors } = this.state;
+    const { errors } = this.props.error;
+
     return (
       <div className={classes.container}>
         <GridContainer justify="center">
@@ -145,7 +147,8 @@ class RegisterPage extends React.Component {
                   </div>
                 </CardHeader>
                 <CardBody>
-                  { this.state.message ? <p color="danger"></p> : null }
+
+                  { this.state.message ? <SnackbarContent message={this.state.message} close /> : null }
                 
                   <CustomInput
                     labelText="First Name..."
@@ -210,7 +213,6 @@ class RegisterPage extends React.Component {
                       fullWidth: true,
                       className: classes.formControlClassName
                     }}
-                    error={errors.username}
                     inputProps={{
                       required: true,
                       type: "email",
@@ -238,7 +240,7 @@ class RegisterPage extends React.Component {
                       onChange:this.handlePnNameChange,
                       endAdornment: (
                         <InputAdornment position="end">
-                          <Face className={classes.inputAdornmentIcon} />
+                          <Phone className={classes.inputAdornmentIcon} />
                         </InputAdornment>
                       )
                     }}
@@ -258,7 +260,7 @@ class RegisterPage extends React.Component {
                       onChange:this.handleUnNameChange,
                       endAdornment: (
                         <InputAdornment position="end">
-                          <Face className={classes.inputAdornmentIcon} />
+                          <DoneIcon className={classes.inputAdornmentIcon} />
                         </InputAdornment>
                       )
                     }}
@@ -270,7 +272,6 @@ class RegisterPage extends React.Component {
                       fullWidth: true,
                       className: classes.formControlClassName
                     }}
-                    error={errors.password}
                     inputProps={{
                       required: true,
                       name: "password",
@@ -330,7 +331,7 @@ class RegisterPage extends React.Component {
 
 const mapStateToProps = state => ({
   isAuthenticated : state.auth.isAuthenticated,
-  error : state.error
+  error : state.error.message
 })
 
 export default connect(

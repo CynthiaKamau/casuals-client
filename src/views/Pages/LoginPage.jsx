@@ -12,8 +12,9 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 // @material-ui/icons
-import Email from "@material-ui/icons/Email";
+import Phone from "@material-ui/icons/Phone";
 import Check from "@material-ui/icons/Check";
+import SnackbarContent from "components/Snackbar/SnackbarContent.jsx";
 
 // core components
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -41,6 +42,19 @@ class LoginPage extends React.Component {
     history: PropTypes.object,
     login: PropTypes.func.isRequired,
     // clearError : PropTypes.func.isRequired
+  }
+
+  componentDidUpdate(prevProps) {
+    const { error} = this.props;
+
+    if(error !== prevProps.error) {
+      if(error.id === 'LOGIN_FAIL') {
+        this.setState({ message : error.message })
+      } else {
+        this.setState({ message : null})
+      }
+
+    }
   }
 
   handlePNChange = e => {this.setState( { phone_number: e.target.value}) }
@@ -79,7 +93,7 @@ class LoginPage extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { errors } = this.state;
+
     return (
       <div className={classes.container}>
         <GridContainer justify="center">
@@ -125,6 +139,9 @@ class LoginPage extends React.Component {
                     Or Sign in with <strong>admin@material.com</strong> and the
                     password <strong>secret</strong>{" "}
                   </p>
+
+                  { this.state.message ? <SnackbarContent message={this.state.message} close /> : null }
+
                   <CustomInput
                     labelText="Phone Number..."
                     id="phone_number"
@@ -139,7 +156,7 @@ class LoginPage extends React.Component {
                       onChange:this.handlePNChange,
                       endAdornment: (
                         <InputAdornment position="end">
-                          <Email className={classes.inputAdornmentIcon} />
+                          <Phone className={classes.inputAdornmentIcon} />
                         </InputAdornment>
                       )
                     }}
@@ -191,7 +208,7 @@ class LoginPage extends React.Component {
                 </CardBody>
                 <CardFooter className={classes.justifyContentCenter}>
                   <Button type="submit" color="primary" simple size="lg" block>
-                    Let's Go
+                    LOGIN
                   </Button>
                 </CardFooter>
               </Card>

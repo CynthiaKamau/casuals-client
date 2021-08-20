@@ -1,9 +1,9 @@
-import React from "react";
+import React, {Fragment} from "react";
 import classNames from "classnames";
 import { NavLink } from "react-router-dom";
 
-import { logout } from "../../actions/auth";
 import { connect} from "react-redux";
+import { logout } from "../../actions/auth";
 import PropTypes from "prop-types";
 
 // @material-ui/core components
@@ -25,10 +25,13 @@ import CustomInput from "components/CustomInput/CustomInput.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 
 import headerLinksStyle from "assets/jss/material-dashboard-react/components/headerLinksStyle.jsx";
+import { useRef } from "react";
 class HeaderLinks extends React.Component {
 
   static propTypes = {
-    logout: PropTypes.func.isRequired
+    isAuthenticated: PropTypes.bool,
+    logout: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired
   }
 
   state = {
@@ -54,6 +57,39 @@ class HeaderLinks extends React.Component {
   render() {
     const { classes } = this.props;
     const { open, profilePopupOpen } = this.state;
+    const { isAuthenticated, user} = this.props.auth;
+
+    const authLinks = (
+      <Fragment>
+        <NavLink to="/admin/user">
+          <MenuItem
+            onClick={this.handleClose}
+            className={classes.dropdownItem}
+          >
+            Profile
+          </MenuItem>
+        </NavLink>
+        <MenuItem
+          onClick={this.props.logout}
+          className={classes.dropdownItem}>
+          Logout
+        </MenuItem>
+      </Fragment>
+    );
+
+    const guestLinks = (
+      <Fragment>
+        <NavLink to="/auth/login-page">
+          <MenuItem
+            onClick={this.handleClose}
+            className={classes.dropdownItem}
+          >
+            Login
+          </MenuItem>
+        </NavLink>
+      </Fragment>
+    );
+
     return (
       <div>
         <div className={classes.searchWrapper}>
@@ -81,7 +117,7 @@ class HeaderLinks extends React.Component {
         >
           <Dashboard className={classes.icons} />
           <Hidden mdUp implementation="css">
-            <p className={classes.linkText}>Dashboard</p>
+            <p className={classes.linkText}>{ user ? `Welcome ${user.first_name}` : Dashboard} </p> 
           </Hidden>
         </Button>
         <div className={classes.manager}>
@@ -204,38 +240,9 @@ class HeaderLinks extends React.Component {
                 <Paper>
                   <ClickAwayListener onClickAway={this.handleClose}>
                     <MenuList role="menu">
-                      <NavLink to="/admin/user">
-                        <MenuItem
-                          onClick={this.handleClose}
-                          className={classes.dropdownItem}
-                        >
-                          Profile
-                        </MenuItem>
-                      </NavLink>
-                      <MenuItem
-                        onClick={this.handleClose}
-                        className={classes.dropdownItem}
-                      >
-                        Settings
-                      </MenuItem>
-                      <MenuItem
-                        onClick={this.handleClose}
-                        className={classes.dropdownItem}
-                      >
-                        Activity
-                      </MenuItem>
-                      <MenuItem
-                        onClick={this.handleClose}
-                        className={classes.dropdownItem}
-                      >
-                        Support
-                      </MenuItem>
-                      <MenuItem
-                        onClick={this.props.logout}
-                        className={classes.dropdownItem}
-                      >
-                        Logout
-                      </MenuItem>
+                      
+                      { isAuthenticated ? authLinks : guestLinks}
+
                     </MenuList>
                   </ClickAwayListener>
                 </Paper>
@@ -249,7 +256,7 @@ class HeaderLinks extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  isAuthenticated : state.auth.isAuthenticated,
+  auth : state.auth,
   error : state.error
 })
 export default connect(
