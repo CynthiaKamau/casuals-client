@@ -1,6 +1,11 @@
-import React from "react";
+import React , {useEffect} from "react";
+import axios from "axios";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
+import Grid from '@material-ui/core/Grid';
+import { connect } from "react-redux";
+import { getServiceProviders } from "../../actions/items";
+
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -10,7 +15,7 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 
 const styles = {
-  cardCategoryWhite: {
+  carditemWhite: {
     "&,& a,& a:hover,& a:focus": {
       color: "rgba(255,255,255,.62)",
       margin: "0",
@@ -40,74 +45,81 @@ const styles = {
   }
 };
 
-function ServiceProvidersList(props) {
+function ServiceProvidersList({data, getServiceProviders}, props) {
   const { classes } = props;
+  
+  useEffect(() => {
+    getServiceProviders();
+  }, []);
+
   return (
-    <GridContainer>
-      <GridItem xs={12} sm={12} md={12}>
-        <Card>
-          <CardHeader color="primary">
-            <h4 className={classes.cardTitleWhite}>Simple Table</h4>
-            <p className={classes.cardCategoryWhite}>
-              Here is a subtitle for this table
-            </p>
-          </CardHeader>
-          <CardBody>
-            <Table
-              tableHeaderColor="primary"
-              tableHead={["Name", "Country", "City", "Salary"]}
-              tableData={[
-                ["Dakota Rice", "Niger", "Oud-Turnhout", "$36,738"],
-                ["Minerva Hooper", "Curaçao", "Sinaai-Waas", "$23,789"],
-                ["Sage Rodriguez", "Netherlands", "Baileux", "$56,142"],
-                ["Philip Chaney", "Korea, South", "Overland Park", "$38,735"],
-                ["Doris Greene", "Malawi", "Feldkirchen in Kärnten", "$63,542"],
-                ["Mason Porter", "Chile", "Gloucester", "$78,615"]
-              ]}
-            />
-          </CardBody>
-        </Card>
-      </GridItem>
-      <GridItem xs={12} sm={12} md={12}>
-        <Card plain>
-          <CardHeader plain color="primary">
-            <h4 className={classes.cardTitleWhite}>
-              Table on Plain Background
-            </h4>
-            <p className={classes.cardCategoryWhite}>
-              Here is a subtitle for this table
-            </p>
-          </CardHeader>
-          <CardBody>
-            <Table
-              tableHeaderColor="primary"
-              tableHead={["ID", "Name", "Country", "City", "Salary"]}
-              tableData={[
-                ["1", "Dakota Rice", "$36,738", "Niger", "Oud-Turnhout"],
-                ["2", "Minerva Hooper", "$23,789", "Curaçao", "Sinaai-Waas"],
-                ["3", "Sage Rodriguez", "$56,142", "Netherlands", "Baileux"],
-                [
-                  "4",
-                  "Philip Chaney",
-                  "$38,735",
-                  "Korea, South",
-                  "Overland Park"
-                ],
-                [
-                  "5",
-                  "Doris Greene",
-                  "$63,542",
-                  "Malawi",
-                  "Feldkirchen in Kärnten"
-                ],
-                ["6", "Mason Porter", "$78,615", "Chile", "Gloucester"]
-              ]}
-            />
-          </CardBody>
-        </Card>
-      </GridItem>
-    </GridContainer>
-  );
+    <div>
+
+      { data.isLoading ? (
+        <h2> Loading... </h2>
+        ) : (
+          <GridContainer>
+            <Grid xs={12} sm={12} md={12} direction="row" >
+              <Card plain>
+                <CardHeader plain color="primary">
+                  <h4 >Material Design Icons</h4>
+                  <p >
+                    Handcrafted by our friends from{" "}
+                    <a
+                      href="https://design.google.com/icons/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Google
+                    </a>
+                  </p>
+                </CardHeader>
+
+                <CardBody>
+
+                    { data.items.rows && data.items.rows.map( item => {
+                    return (
+                      <Grid lg="6" xl="3" key={item.key} >
+
+                        <Card className="card" key={item.id}>
+                          <CardHeader color="primary"> {item.user.first_name} {item.user.last_name} </CardHeader>
+                          <CardBody center>
+                            <p> {item.gender}</p>
+                            <p> {item.phone_number}</p>
+                            <p> {item.address} </p>
+                            <p> {item.status}</p>
+                          </CardBody>
+                        </Card> 
+                      </Grid>
+                      
+                      )
+                    })}
+
+                  </CardBody>
+              </Card>
+            </Grid>
+          </GridContainer>
+
+        )
+      }
+    </div>
+    
+  )
 }
 
-export default withStyles(styles)(ServiceProvidersList);
+const mapStateToProps = state => {
+  return {
+    data : state.items
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+      getServiceProviders: () => dispatch(getServiceProviders())
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(ServiceProvidersList));

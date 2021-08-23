@@ -6,5 +6,5 @@ import { combineReducers } from 'redux';
 export default combineReducers({
     error : error,
     auth : auth,
-    item : item
+    items : item
 })

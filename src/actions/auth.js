@@ -19,7 +19,9 @@ export const loadUser = (dispatch, getState) => {
     .then(res => dispatch({
         type : USER_FETCHED,
         payload : res
-    }))
+    })
+    
+    )
     .catch(error => {
         // dispatch(setError(error.response.error, error.response.status)),
         dispatch({

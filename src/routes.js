@@ -86,6 +86,22 @@ const dashboardRoutes = [
     icon: Notifications,
     component: NotificationsPage,
     layout: "/admin"
+  },
+  {
+    path: "/login-page",
+    name: "Login Page",
+    rtlName: "پشتیبانی از راست به چپ",
+    icon: Login,
+    component: LoginPage,
+    layout: "/auth"
+  },
+  {
+    path: "/register-page",
+    name: "Register Page",
+    rtlName: "پشتیبانی از راست به چپ",
+    icon: Register,
+    component: RegisterPage,
+    layout: "/auth"
   }
  
 ];

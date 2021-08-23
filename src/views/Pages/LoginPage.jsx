@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect} from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import { login } from "../../actions/auth";
 import { clearError } from "../../actions/error";
@@ -25,7 +26,6 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 
 import loginPageStyle from "assets/jss/material-dashboard-react/views/loginPageStyle.jsx";
-
 class LoginPage extends React.Component {
   
   state = {
