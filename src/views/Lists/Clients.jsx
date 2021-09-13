@@ -1,10 +1,10 @@
-import React , {useEffect} from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import { makeStyles } from '@material-ui/core/styles';
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-
-import { connect } from "react-redux";
-import { getClients } from "../../actions/items";
+import Grid from '@material-ui/core/Grid';
+import { getClients} from "../../actions/items";
 
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
@@ -13,11 +13,23 @@ import Table from "components/Table/Table.jsx";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
-import { useState } from "react";
-import { TableBody, TableCell, TableRow, TableHead } from "@material-ui/core";
+
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    height: 140,
+    width: 100,
+  },
+  control: {
+    padding: theme.spacing(2),
+  },
+}));
 
 const styles = {
-  carditemWhite: {
+  cardCategoryWhite: {
     "&,& a,& a:hover,& a:focus": {
       color: "rgba(255,255,255,.62)",
       margin: "0",
@@ -29,7 +41,6 @@ const styles = {
       color: "#FFFFFF"
     }
   },
-  
   cardTitleWhite: {
     color: "#FFFFFF",
     marginTop: "0px",
@@ -47,58 +58,72 @@ const styles = {
   }
 };
 
-function ClientList({data, getClients}, props) {
-  const { classes } = props;
-  
-  useEffect(() => {
-    getClients();
-  }, []);
-
-  return data.isLoading ? (
-    <h2> Loading... </h2>
-  ) : (
-    <div xs={12} sm={12} md={12} lg={12} justify="center" style={{display: 'flex',flexWrap: "wrap", background:"#E5E5E5"}}>
-          
-      <Table >
-        <TableHead>
-          <TableRow>ID</TableRow>
-          <TableRow>Name</TableRow>
-          <TableRow>Location</TableRow>
-          <TableRow>Gender</TableRow>
-          <TableRow>Status</TableRow>
-
-        </TableHead>
-
-        <TableBody>
-          {/* {data.items.rows.map((item, index) => (
-              <TableRow data-index={index}>
-                <TableCell>{item.username}</TableCell>
-                <TableCell>{item.id}</TableCell>
-                <TableCell>{item.gender}</TableCell>
-              </TableRow>
-          ))} */}
-          
-        </TableBody>
-        
-      </Table>
-        
-    </div>
-  );
-}
 
 const mapStateToProps = state => {
   return {
-    data : state.items
+    data: state.items
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-      getClients: () => dispatch(getClients())
+    getClients: () => dispatch(getClients())
   }
+}
+
+
+function clientsList({ data, getClients}, props) {
+  const classes = useStyles();
+  const [spacing, setSpacing] = React.useState(2);
+
+  useEffect(() => {
+    getClients();
+  }, []);
+
+  return (
+    <div>
+
+      {data.isLoading ? (
+        <h2> Loading... </h2>
+      ) : (
+        <GridContainer>
+          {data.items && data.items.map(item => {
+            return (
+              <Grid container className={classes.root} justify={"center"} spacing={3}>
+                <Grid item xs={4} key={item.key} display="inline" >
+
+                  <Card className="card" key={item.id}>
+                    <CardHeader color="primary"> {item.user.first_name} {item.user.last_name} </CardHeader>
+                    <CardBody center>
+                      <p> {item.username}</p>
+                      <p> {item.gender}</p>
+                      <p> {item.phone_number}</p>
+                      <p> {item.address} </p>
+                      <p> {item.status}</p>
+                    </CardBody>
+                    <CardFooter>
+                    </CardFooter>
+
+                  </Card>
+
+                </Grid>
+                
+              </Grid>
+
+            )
+          })}
+        </GridContainer>
+
+      )
+      }
+    </div>
+
+  )
+
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(ClientList));
+)(withStyles(styles)(clientsList));
+

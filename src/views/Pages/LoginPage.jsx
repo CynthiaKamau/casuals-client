@@ -1,7 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { connect} from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { connect } from "react-redux";
+import { useNavigate, Redirect } from "react-router-dom";
+import { withRouter } from 'react-router-dom';
 
 import { login } from "../../actions/auth";
 import { clearError } from "../../actions/error";
@@ -27,37 +28,52 @@ import CardFooter from "components/Card/CardFooter.jsx";
 
 import loginPageStyle from "assets/jss/material-dashboard-react/views/loginPageStyle.jsx";
 class LoginPage extends React.Component {
-  
+
   state = {
     phone_number: '',
     password: ''
   }
 
   static propTypes = {
-    isAuthenticated : PropTypes.bool,
-    error : PropTypes.object.isRequired,
+    isAuthenticated: PropTypes.bool,
+    error: PropTypes.object.isRequired,
     classes: PropTypes.object.isRequired,
     history: PropTypes.object,
     login: PropTypes.func.isRequired,
-    clearError : PropTypes.func.isRequired
+    clearError: PropTypes.func.isRequired
   }
 
   componentDidUpdate(prevProps) {
-    const { error} = this.props;
+    const { error } = this.props;
 
-    if(error !== prevProps.error) {
-      if(error.id === 'LOGIN_FAIL') {
-        this.setState({ message : error.message })
+    if (error !== prevProps.error) {
+      if (error.id === 'LOGIN_FAIL') {
+        this.setState({ message: error.message })
       } else {
-        this.setState({ message : null})
+        this.setState({ message: null })
 
       }
 
     }
+
+
   }
 
-  handlePNChange = e => {this.setState( { phone_number: e.target.value}) }
-  handlePWChange = e => {this.setState( { password: e.target.value}) }
+  renderRedirect = () => {
+
+    const { isAuthenticated } = this.props;
+
+    if (isAuthenticated === true) {
+      return (
+        <Redirect
+          to="/admin/jobs"
+        />
+      );
+    }
+  };
+
+  handlePNChange = e => { this.setState({ phone_number: e.target.value }) }
+  handlePWChange = e => { this.setState({ password: e.target.value }) }
 
   login = async e => {
 
@@ -65,7 +81,7 @@ class LoginPage extends React.Component {
 
     this.props.clearError();
 
-    const {phone_number, password} = this.state;
+    const { phone_number, password } = this.state;
 
     const User = {
       phone_number,
@@ -96,7 +112,12 @@ class LoginPage extends React.Component {
     const { classes } = this.props;
 
     return (
+
       <div className={classes.container}>
+
+        {this.renderRedirect()}
+
+
         <GridContainer justify="center">
           <GridItem xs={12} sm={8}>
             <h4 className={classes.textCenter} style={{ marginTop: 0 }}>
@@ -141,7 +162,7 @@ class LoginPage extends React.Component {
                     password <strong>secret</strong>{" "}
                   </p>
 
-                  { this.state.message ? <SnackbarContent color="warning" message={this.state.message} close /> : null }
+                  {this.state.message ? <SnackbarContent color="warning" message={this.state.message} close /> : null}
 
                   <CustomInput
                     labelText="Phone Number..."
@@ -153,8 +174,8 @@ class LoginPage extends React.Component {
                     inputProps={{
                       required: true,
                       name: "phone_number",
-                      value:this.state.phone_number,
-                      onChange:this.handlePNChange,
+                      value: this.state.phone_number,
+                      onChange: this.handlePNChange,
                       endAdornment: (
                         <InputAdornment position="end">
                           <Phone className={classes.inputAdornmentIcon} />
@@ -172,9 +193,9 @@ class LoginPage extends React.Component {
                     inputProps={{
                       type: "password",
                       required: true,
-                      name:"password",
-                      value:this.state.password,
-                      onChange:this.handlePWChange, 
+                      name: "password",
+                      value: this.state.password,
+                      onChange: this.handlePWChange,
                       endAdornment: (
                         <InputAdornment position="end">
                           <Icon className={classes.inputAdornmentIcon}>
@@ -228,5 +249,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  {login, clearError}
+  { login, clearError }
 )(withStyles(loginPageStyle)(LoginPage));

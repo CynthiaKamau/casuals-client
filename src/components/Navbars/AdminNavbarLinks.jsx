@@ -116,7 +116,7 @@ class HeaderLinks extends React.Component {
         >
           <Dashboard className={classes.icons} />
           <Hidden mdUp implementation="css">
-            <p className={classes.linkText}>{ isAuthenticated ? `Welcome ${user}` : Dashboard} </p> 
+            {/* <p className={classes.linkText}>{ isAuthenticated ? `Welcome ${user.username}` : Dashboard} </p>  */}
           </Hidden>
         </Button>
         <div className={classes.manager}>
