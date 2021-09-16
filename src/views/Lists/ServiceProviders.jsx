@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import withStyles from "@material-ui/core/styles/withStyles";
 import Grid from '@material-ui/core/Grid';
 import { getServiceProviders } from "../../actions/items";
+import { useHistory } from "react-router-dom";
 
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
@@ -55,8 +56,7 @@ const styles = {
       lineHeight: "1"
     }
   }
-};
-
+}
 
 const mapStateToProps = state => {
   return {
@@ -72,12 +72,18 @@ const mapDispatchToProps = dispatch => {
 
 
 function ServiceProvidersList({ data, getServiceProviders }, props) {
-  const classes = useStyles();
-  const [spacing, setSpacing] = React.useState(2);
+  const { classes } = props;
+
+  let history = useHistory();
 
   useEffect(() => {
     getServiceProviders();
   }, []);
+
+  const handleClick = (id) => e => {
+    console.log("here", id);
+    history.push('/admin/user');
+  }
 
   return (
     <div>
@@ -91,14 +97,13 @@ function ServiceProvidersList({ data, getServiceProviders }, props) {
               <h4 >Service Providers</h4>
             </CardHeader>
 
-            <CardBody>
+            <CardBody style={{ display: 'flex', flexWirection: 'wrap' }}>
 
-              {data.items && data.items.map(item => {
+              {data.items && data.items.length > 0 && data.items.map(item => {
                 return (
-                  <Grid container className={classes.root} justify={"center"} spacing={3}>
-                    <Grid item xs={4} key={item.key} display="inline" >
-
-                      <Card className="card" key={item.id}>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} sm={10}>
+                      <Card className="card" key={item.id} onClick={handleClick(item.id)}>
                         <CardHeader color="primary"> {item.user.first_name} {item.user.last_name} </CardHeader>
                         <CardBody center>
                           <p> {item.username}</p>
@@ -108,11 +113,8 @@ function ServiceProvidersList({ data, getServiceProviders }, props) {
                           <p> {item.status}</p>
                         </CardBody>
                       </Card>
-
                     </Grid>
-                    
                   </Grid>
-
                 )
               })}
 

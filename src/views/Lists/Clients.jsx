@@ -13,6 +13,7 @@ import Table from "components/Table/Table.jsx";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
+import CardFooter from "components/Card/CardFooter.jsx";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -87,7 +88,7 @@ function clientsList({ data, getClients}, props) {
         <h2> Loading... </h2>
       ) : (
         <GridContainer>
-          {data.items && data.items.map(item => {
+          {data.items && data.items.length > 0 && data.items.map(item => {
             return (
               <Grid container className={classes.root} justify={"center"} spacing={3}>
                 <Grid item xs={4} key={item.key} display="inline" >

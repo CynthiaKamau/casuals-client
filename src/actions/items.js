@@ -34,6 +34,16 @@ export const getServiceProviders = () => {
 
 }
 
+//get jobs
+export const getJobs = () => {
+    return function (dispatch) {
+        axios.get('/jobs')
+            .then(res => dispatch({ type: JOBS_SUCCESS, payload: res.data.data})
+            )
+            .catch(error => dispatch(setError(error.response.data, error.response.status)))
+    };
+}
+
 export const tokenConfig = getState => {
 
     //get token from local storage
