@@ -7,6 +7,8 @@ import Grid from '@material-ui/core/Grid';
 import { getClients} from "../../actions/items";
 
 // core components
+import { useHistory } from "react-router-dom";
+
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import Table from "components/Table/Table.jsx";
@@ -14,20 +16,6 @@ import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
-
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    height: 140,
-    width: 100,
-  },
-  control: {
-    padding: theme.spacing(2),
-  },
-}));
 
 const styles = {
   cardCategoryWhite: {
@@ -59,7 +47,6 @@ const styles = {
   }
 };
 
-
 const mapStateToProps = state => {
   return {
     data: state.items
@@ -74,45 +61,55 @@ const mapDispatchToProps = dispatch => {
 
 
 function clientsList({ data, getClients}, props) {
-  const classes = useStyles();
-  const [spacing, setSpacing] = React.useState(2);
+  const {classes} = props;
 
   useEffect(() => {
     getClients();
   }, []);
 
+  let history = useHistory();
+
+  const handleClick = (id) => e => {
+    console.log("here", id);
+    // dispatch(getClient(id));
+    history.push(`/admin/client/${id}`);
+  }
+
   return (
     <div>
 
-      {data.isLoading ? (
+      {data.isLoading || data.items.length == 0 ? (
         <h2> Loading... </h2>
-      ) : (
+      ): (
         <GridContainer>
-          {data.items && data.items.length > 0 && data.items.map(item => {
-            return (
-              <Grid container className={classes.root} justify={"center"} spacing={3}>
-                <Grid item xs={4} key={item.key} display="inline" >
+          <Card plain>
+            <CardHeader plain color="primary">
+              <h4 >Service Providers</h4>
+            </CardHeader>
 
-                  <Card className="card" key={item.id}>
-                    <CardHeader color="primary"> {item.user.first_name} {item.user.last_name} </CardHeader>
-                    <CardBody center>
-                      <p> {item.username}</p>
-                      <p> {item.gender}</p>
-                      <p> {item.phone_number}</p>
-                      <p> {item.address} </p>
-                      <p> {item.status}</p>
-                    </CardBody>
-                    <CardFooter>
-                    </CardFooter>
+            <CardBody style={{ display: 'flex', flexWirection: 'wrap' }}>
 
-                  </Card>
+              {data.items && data.items.length > 0 && data.items.map(item => {
+                return (
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} sm={10}>
+                      <Card className="card" key={item.id} onClick={handleClick(item.id)}>
+                        <CardHeader color="primary"> {item.user.first_name} {item.user.last_name} </CardHeader>
+                        <CardBody center>
+                          <p> {item.username}</p>
+                          <p> {item.gender}</p>
+                          <p> {item.phone_number}</p>
+                          <p> {item.address} </p>
+                          <p> {item.status}</p>
+                        </CardBody>
+                      </Card>
+                    </Grid>
+                  </Grid>
+                )
+              })}
 
-                </Grid>
-                
-              </Grid>
-
-            )
-          })}
+            </CardBody>
+          </Card>
         </GridContainer>
 
       )

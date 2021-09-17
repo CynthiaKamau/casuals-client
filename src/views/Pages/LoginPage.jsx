@@ -1,8 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { useNavigate, Redirect } from "react-router-dom";
-import { withRouter } from 'react-router-dom';
+import { Redirect } from "react-router-dom";
 
 import { login } from "../../actions/auth";
 import { clearError } from "../../actions/error";

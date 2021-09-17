@@ -4,20 +4,19 @@ import Person from "@material-ui/icons/Person";
 import BubbleChart from "@material-ui/icons/BubbleChart";
 import LocationOn from "@material-ui/icons/LocationOn";
 import Notifications from "@material-ui/icons/Notifications";
-import Language from "@material-ui/icons/Language";
 import Register from "@material-ui/icons/GroupAdd";
 import Login from "@material-ui/icons/LockOpen";
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.jsx";
-import UserProfile from "views/UserProfile/UserProfile.jsx";
+import UserProfile from "views/UserProfile/EditUserProfile.jsx";
+import ClientProfile from "views/UserProfile/ClientProfile.jsx";
+import WorkerProfile from "views/UserProfile/WorkerProfile.jsx";
 import ServiceProviders from "views/Lists/ServiceProviders.jsx";
 import Clients from "views/Lists/Clients.jsx";
 import Jobs from "views/Lists/Jobs";
 import Icons from "views/Icons/Icons.jsx";
 import Maps from "views/Maps/Maps.jsx";
 import NotificationsPage from "views/Notifications/Notifications.jsx";
-// core components/views for RTL layout
-import RTLPage from "views/RTLPage/RTLPage.jsx";
 // core components/views for Auth layout
 import LoginPage from "views/Pages/LoginPage.jsx";
 import RegisterPage from "views/Pages/RegisterPage.jsx";
@@ -37,6 +36,22 @@ const dashboardRoutes = [
     rtlName: "ملف تعريفي للمستخدم",
     icon: Person,
     component: UserProfile,
+    layout: "/admin"
+  },
+  {
+    path: "/client/:id",
+    name: "Client Profile",
+    rtlName: "ملف تعريفي للمستخدم",
+    icon: Person,
+    component: ClientProfile,
+    layout: "/admin"
+  },
+  {
+    path: "/service-provider/:id",
+    name: "Service Provider Profile",
+    rtlName: "ملف تعريفي للمستخدم",
+    icon: Person,
+    component: WorkerProfile,
     layout: "/admin"
   },
   {

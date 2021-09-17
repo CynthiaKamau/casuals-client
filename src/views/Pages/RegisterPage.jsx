@@ -1,6 +1,7 @@
 import React from "react";
 import { connect} from "react-redux";
 import PropTypes from "prop-types";
+import { Redirect } from "react-router-dom";
 
 import { register } from "../../actions/auth";
 import { clearError } from "../../actions/error";
@@ -115,11 +116,27 @@ class RegisterPage extends React.Component {
     });
   };
 
+  renderRedirect = () => {
+
+    const { isAuthenticated } = this.props;
+
+    if (isAuthenticated === true) {
+      return (
+        <Redirect
+          to="/auth/login-page"
+        />
+      );
+    }
+  };
+
   render() {
     const { classes } = this.props;
 
     return (
       <div className={classes.container}>
+
+      {this.renderRedirect()}
+
         <GridContainer justify="center">
           <GridItem xs={12} sm={6} md={6}>
             <form onSubmit={this.register}>
@@ -319,7 +336,7 @@ class RegisterPage extends React.Component {
                 </CardBody>
                 <CardFooter className={classes.justifyContentCenter}>
                   <Button type="submit" color="primary" simple size="lg" block>
-                    Let's Go
+                    REGISTER
                   </Button>
                 </CardFooter>
               </Card>

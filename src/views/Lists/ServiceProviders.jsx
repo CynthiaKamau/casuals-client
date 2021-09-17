@@ -15,19 +15,6 @@ import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    height: 140,
-    width: 100,
-  },
-  control: {
-    padding: theme.spacing(2),
-  },
-}));
-
 const styles = {
   cardCategoryWhite: {
     "&,& a,& a:hover,& a:focus": {
@@ -82,7 +69,7 @@ function ServiceProvidersList({ data, getServiceProviders }, props) {
 
   const handleClick = (id) => e => {
     console.log("here", id);
-    history.push('/admin/user');
+    history.push(`/admin/service-provider/${id}`);
   }
 
   return (
