@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import Grid from '@material-ui/core/Grid';
-import { getClients} from "../../actions/items";
+import { getClients, getClient} from "../../actions/items";
 
 // core components
 import { useHistory } from "react-router-dom";
@@ -55,7 +55,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getClients: () => dispatch(getClients())
+    getClients: () => dispatch(getClients()),
+    handleClick: (id) => {dispatch(getClient(id))}
   }
 }
 
@@ -72,7 +73,7 @@ function clientsList({ data, getClients}, props) {
   const handleClick = (id) => e => {
     console.log("here", id);
     // dispatch(getClient(id));
-    history.push(`/admin/client/${id}`);
+    history.push(`/admin/client/id=${id}`);
   }
 
   return (
@@ -93,7 +94,7 @@ function clientsList({ data, getClients}, props) {
                 return (
                   <Grid container spacing={3}>
                     <Grid item xs={12} sm={10}>
-                      <Card className="card" key={item.id} onClick={handleClick(item.id)}>
+                      <Card className="card" key={item.id} onClick={handleClick(item.user.id)}>
                         <CardHeader color="primary"> {item.user.first_name} {item.user.last_name} </CardHeader>
                         <CardBody center>
                           <p> {item.username}</p>

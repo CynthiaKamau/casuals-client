@@ -37,8 +37,8 @@ export const getClients = () => {
 // //get specific client
 export const getClient = (id) => {
     return function (dispatch, getState) {
-        axios.get(`/client/${id}`, tokenConfig(getState)) 
-            .then(res => dispatch({ type : CLIENT_PROFILE_SUCCESS, payload: res.data.data})
+        axios.get(`/client/4`, tokenConfig(getState))
+            .then(res => dispatch({ type: CLIENT_PROFILE_SUCCESS, payload: res.data.data })
             )
             .catch(error => dispatch(setError(error.response.data, error.response.status)))
     }
@@ -59,20 +59,19 @@ export const getServiceProviders = () => {
 //get specific worker
 export const getWorker = (id) => {
     return function (dispatch, getState) {
-        axios.get(`/worker/${id}`, tokenConfig(getState)) 
-            .then(res => dispatch({ type : WORKER_PROFILE_SUCCESS, payload: res.data.data})
+        axios.get(`/worker/3`, tokenConfig(getState))
+            .then(res => dispatch({ type: WORKER_PROFILE_SUCCESS, payload: res.data.data })
             )
             .catch(error => dispatch(setError(error.response.data, error.response.status)))
     }
 }
 
 
-
 //get jobs
 export const getJobs = () => {
     return function (dispatch, getState) {
         axios.get('/jobs', tokenConfig(getState))
-            .then(res => dispatch({ type: JOBS_SUCCESS, payload: res.data.data})
+            .then(res => dispatch({ type: JOBS_SUCCESS, payload: res.data.data })
             )
             .catch(error => dispatch(setError(error.response.data, error.response.status)))
     };

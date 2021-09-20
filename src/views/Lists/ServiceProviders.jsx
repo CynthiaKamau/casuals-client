@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import Grid from '@material-ui/core/Grid';
-import { getServiceProviders } from "../../actions/items";
 import { useHistory } from "react-router-dom";
+import { getWorker, getServiceProviders } from "../../actions/items";
 
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
@@ -53,13 +53,14 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getServiceProviders: () => dispatch(getServiceProviders())
+    getServiceProviders: () => dispatch(getServiceProviders()),
   }
 }
 
 
 function ServiceProvidersList({ data, getServiceProviders }, props) {
   const { classes } = props;
+  const dispatch = useDispatch();
 
   let history = useHistory();
 
@@ -69,7 +70,7 @@ function ServiceProvidersList({ data, getServiceProviders }, props) {
 
   const handleClick = (id) => e => {
     console.log("here", id);
-    history.push(`/admin/service-provider/${id}`);
+    history.push(`/admin/service-provider/id=${id}`);
   }
 
   return (
@@ -90,9 +91,9 @@ function ServiceProvidersList({ data, getServiceProviders }, props) {
                 return (
                   <Grid container spacing={3}>
                     <Grid item xs={12} sm={10}>
-                      <Card className="card" key={item.id} onClick={handleClick(item.id)}>
+                      <Card className="card" key={item.id} onClick={handleClick(item.user.id), dispatch(getWorker(item.user.id))}>
                         <CardHeader color="primary"> {item.user.first_name} {item.user.last_name} </CardHeader>
-                        <CardBody center>
+                        <CardBody center >
                           <p> {item.username}</p>
                           <p> {item.gender}</p>
                           <p> {item.phone_number}</p>

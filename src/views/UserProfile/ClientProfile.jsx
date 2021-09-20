@@ -1,10 +1,10 @@
-import React, { useEffect} from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
+import axios from "axios";
 
-import { getClient } from "../../actions/items";
 // core components
 import TextField from '@material-ui/core/TextField';
 import GridItem from "components/Grid/GridItem.jsx";
@@ -38,92 +38,90 @@ const styles = {
   }
 };
 
-const mapStateToProps = state => {
-  return {
-    data : state.items
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    getClient: () => dispatch(getClient())
-  }
-}
-
-function ClientProfile({ data, getClient}, props) {
+export default function clientProfile(props) {
   const { classes } = props;
+  const [client, setClient] = React.useState("");
 
   useEffect(() => {
-    getClient();
-  },[]);
 
-  console.log("my client",data);
+    const str = window.location.pathname;
+    const id = str.slice(17, 1000);
+
+    console.log("my id", id);
+
+    axios.get(`/client/${id}`).then(response => {
+      console.log("my data", response.data.data)
+      setClient(response.data.data);
+    })
+
+  }, []);
+
 
   return (
     <div>
 
-      {data.isLoading && data.items.length === 0 ? (
+      {client.length === 0 ? (
         <h2> Loading... </h2>
       ) : (
 
         <GridContainer>
           <GridItem xs={12} sm={12} md={8}>
-              <Card>
-                <CardHeader color="primary">
-                  <h4>Profile</h4>
-                  <p>
-                    Client Information
-                  </p>
-                </CardHeader>
-                <CardBody>
-                  <GridContainer>
-                    <GridItem xs={12} sm={12} md={3}>
+            <Card>
+              <CardHeader color="primary">
+                <h4>Profile</h4>
+                <p>
+                  Service Provider Information
+                </p>
+              </CardHeader>
+              <CardBody>
+                <GridContainer>
+                  <GridItem xs={12} sm={12} md={3}>
 
-                      <TextField
-                        id="outlined-read-only-input"
-                        label="Gender"
-                        defaultValue={data.items[0].gender}
-                        InputProps={{
-                          readOnly: true,
-                        }}
-                      />
+                    <TextField
+                      id="outlined-read-only-input"
+                      label="Gender"
+                      defaultValue={client.gender}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
 
-                      <TextField
-                        id="outlined-read-only-input"
-                        label="Status"
-                        defaultValue={data.items[0].status}
-                        InputProps={{
-                          readOnly: true,
-                        }}
-                      />
-                    </GridItem>
-                    <GridItem xs={12} sm={12} md={4}>
-                      <TextField
-                          id="outlined-read-only-input"
-                          label="Location"
-                          defaultValue={data.items[0].location}
-                          InputProps={{
-                            readOnly: true,
-                          }}
-                        />
+                    <TextField
+                      id="outlined-read-only-input"
+                      label="Status"
+                      defaultValue={client.status}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={4}>
+                    <TextField
+                      id="outlined-read-only-input"
+                      label="Location"
+                      defaultValue={client.location}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
 
-                        <TextField
-                          id="outlined-read-only-input"
-                          label="Citizenship"
-                          defaultValue={data.items[0].citizenship}
-                          InputProps={{
-                            readOnly: true,
-                          }}
-                        />
-                    </GridItem>
-                  </GridContainer>
-                </CardBody>
-                <CardFooter>
-                  <Button type="submit" color="primary">
-                    Update Profile
-                  </Button>
-                </CardFooter>
-              </Card>
+                    <TextField
+                      id="outlined-read-only-input"
+                      label="Citizenship"
+                      defaultValue={client.citizenship}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    />
+                  </GridItem>
+                </GridContainer>
+              </CardBody>
+              <CardFooter>
+                <Button type="submit" color="primary">
+                  Update Profile
+                </Button>
+              </CardFooter>
+            </Card>
           </GridItem>
           <GridItem xs={12} sm={12} md={4}>
             <Card profile>
@@ -133,8 +131,8 @@ function ClientProfile({ data, getClient}, props) {
                 </a>
               </CardAvatar>
               <CardBody profile>
-                <h6 >CEO / CO-FOUNDER</h6>
-                <h4 >{data.items[0].user.first_name} {data.items[0].user.last_name}</h4>
+                <h6 > Service Provider Information</h6>
+                <h4 >{client.user.first_name} {client.user.last_name}</h4>
                 <p >
                   Don't be scared of the truth because we need to restart the
                   human foundation in truth And I love you like Kanye loves
@@ -150,12 +148,8 @@ function ClientProfile({ data, getClient}, props) {
 
       )
 
-      }  
+      }
     </div>
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withStyles(styles)(ClientProfile));
