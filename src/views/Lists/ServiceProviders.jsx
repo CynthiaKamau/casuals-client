@@ -14,6 +14,7 @@ import Table from "components/Table/Table.jsx";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
+import Loader from "react-loader-spinner";
 
 const styles = {
   cardCategoryWhite: {
@@ -58,7 +59,7 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-function ServiceProvidersList({ data, getServiceProviders }, props) {
+function serviceProvidersList({ data, getServiceProviders }, props) {
   const { classes } = props;
   const dispatch = useDispatch();
 
@@ -68,8 +69,9 @@ function ServiceProvidersList({ data, getServiceProviders }, props) {
     getServiceProviders();
   }, []);
 
+  console.log("workers", data)
+
   const handleClick = (id) => e => {
-    console.log("here", id);
     history.push(`/admin/service-provider/id=${id}`);
   }
 
@@ -77,7 +79,12 @@ function ServiceProvidersList({ data, getServiceProviders }, props) {
     <div>
 
       {data.isLoading || data.length === 0 ? (
-        <h2> Loading... </h2>
+        <Loader
+          type="Puff"
+          color="#00BFFF"
+          height={100}
+          width={100}
+        />
       ) : (
         <GridContainer>
           <Card plain>
@@ -91,7 +98,7 @@ function ServiceProvidersList({ data, getServiceProviders }, props) {
                 return (
                   <Grid container spacing={3}>
                     <Grid item xs={12} sm={10}>
-                      <Card className="card" key={item.id} onClick={handleClick(item.user.id), dispatch(getWorker(item.user.id))}>
+                      <Card className="card" key={item.id} onClick={handleClick(item.user.id)}>
                         <CardHeader color="primary"> {item.user.first_name} {item.user.last_name} </CardHeader>
                         <CardBody center >
                           <p> {item.username}</p>
@@ -121,5 +128,5 @@ function ServiceProvidersList({ data, getServiceProviders }, props) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(ServiceProvidersList));
+)(withStyles(styles)(serviceProvidersList));
 

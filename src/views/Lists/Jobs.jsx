@@ -14,6 +14,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
+import Loader from "react-loader-spinner";
 
 const styles = {
   cardCategoryWhite: {
@@ -61,8 +62,9 @@ const mapDispatchToProps = dispatch => {
 function JobList({ data, getJobs }, props) {
   const { classes } = props;
 
-  const user = useSelector(state => state.auth.user);
-  console.log(user)
+  const {user : currentUser} = useSelector(state => state.auth);
+
+  console.log("jobs", data)
 
   useEffect(() => {
     getJobs();
@@ -72,7 +74,12 @@ function JobList({ data, getJobs }, props) {
     <div>
 
       {data.isLoading || data.length === 0 ? (
-        <h2> Loading... </h2>
+        <Loader
+          type="Puff"
+          color="#00BFFF"
+          height={100}
+          width={100}
+        />
       ) : (
         <GridContainer>
 

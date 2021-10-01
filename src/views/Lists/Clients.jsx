@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { connect, useDispatch } from "react-redux";
-import { makeStyles } from '@material-ui/core/styles';
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import Grid from '@material-ui/core/Grid';
@@ -16,6 +15,7 @@ import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
+import Loader from "react-loader-spinner";
 
 const styles = {
   cardCategoryWhite: {
@@ -64,6 +64,8 @@ const mapDispatchToProps = dispatch => {
 function clientsList({ data, getClients}, props) {
   const {classes} = props;
 
+  console.log(data);
+
   useEffect(() => {
     getClients();
   }, []);
@@ -79,8 +81,13 @@ function clientsList({ data, getClients}, props) {
   return (
     <div>
 
-      {data.isLoading || data.length == 0 ? (
-        <h2> Loading... </h2>
+      {data.length === 0 || data.isLoading ? (
+        <Loader
+          type="Puff"
+          color="#00BFFF"
+          height={100}
+          width={100}
+        />
       ): (
         <GridContainer>
           <Card plain>

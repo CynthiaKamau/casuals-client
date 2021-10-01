@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch, connect } from "react-redux";
-import { useHistory, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -53,8 +53,6 @@ const updateProfile = (props) => {
   const [role, setRole] = React.useState("");
   const [showloader, setshowloader] = useState(false);
   const [id, setId] = React.useState("");
-
-
   const { user: currentUser } = useSelector(state => state.auth);
 
   if (!currentUser) {
@@ -124,7 +122,6 @@ const updateProfile = (props) => {
           color="#00BFFF"
           height={100}
           width={100}
-          timeout={3000} //3 secs
         />
       ) : (
         <GridContainer>

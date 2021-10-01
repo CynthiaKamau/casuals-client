@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import { useSelector, useDispatch, connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -7,6 +8,7 @@ import axios from "axios";
 
 import { getWorker } from "../../actions/items";
 // core components
+import Loader from "react-loader-spinner";
 import TextField from '@material-ui/core/TextField';
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -39,16 +41,19 @@ const styles = {
   }
 };
 
-export default function WorkerProfile({ data, getWorker }, props) {
+const WorkerProfile = ({ data, getWorker }, props) => {
   const { classes } = props;
   const [worker, setWorker] = React.useState("");
+  const { user: currentUser } = useSelector(state => state.auth);
+
+  if (!currentUser) {
+    return <Redirect to="/auth/login-page" />;
+  }
 
   useEffect(() => {
 
     const str = window.location.pathname;
     const id = str.slice(27, 1000);
-
-    console.log("my id", id);
 
     axios.get(`/worker/${id}`).then(response => {
       console.log("my data", response.data.data)
@@ -61,8 +66,13 @@ export default function WorkerProfile({ data, getWorker }, props) {
   return (
     <div>
 
-      {worker.length === 0 ? (
-        <h2> Loading... </h2>
+      {worker.length === 0 || worker.isLoading ? (
+        <Loader
+          type="Puff"
+          color="#00BFFF"
+          height={100}
+          width={100}
+        />
       ) : (
 
         <GridContainer>
@@ -153,4 +163,7 @@ export default function WorkerProfile({ data, getWorker }, props) {
     </div>
   );
 }
+
+export default withStyles(styles)(WorkerProfile);
+
 

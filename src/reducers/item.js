@@ -42,7 +42,7 @@ export default function(state = initialState, action) {
         case JOBS_SUCCESS :
             return {
                 ...state,
-                items : action.payload,
+                items : action.payload.message,
                 isLoading : false
             }
 

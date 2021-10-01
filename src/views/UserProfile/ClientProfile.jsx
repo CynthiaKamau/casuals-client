@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import { useSelector, useDispatch, connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -16,6 +17,7 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardAvatar from "components/Card/CardAvatar.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
+import Loader from "react-loader-spinner";
 
 import avatar from "assets/img/faces/marc.jpg";
 
@@ -38,7 +40,7 @@ const styles = {
   }
 };
 
-export default function clientProfile(props) {
+const clientProfile = (props) => {
   const { classes } = props;
   const [client, setClient] = React.useState("");
 
@@ -60,7 +62,13 @@ export default function clientProfile(props) {
     <div>
 
       {client.isLoading || client.length === 0 ? (
-        <h2> Loading... </h2>
+        <Loader
+          type="Puff"
+          color="#00BFFF"
+          height={100}
+          width={100}
+          timeout={3000} //3 secs
+        />
       ) : (
 
         <GridContainer>
@@ -151,4 +159,6 @@ export default function clientProfile(props) {
     </div>
   );
 }
+
+export default withStyles(styles)(clientProfile);
 
