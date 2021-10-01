@@ -14,12 +14,14 @@ import WorkerProfile from "views/UserProfile/WorkerProfile.jsx";
 import ServiceProviders from "views/Lists/ServiceProviders.jsx";
 import Clients from "views/Lists/Clients.jsx";
 import Jobs from "views/Lists/Jobs";
+import JobDetails from "./views/Lists/JobDetails";
 import Icons from "views/Icons/Icons.jsx";
 import Maps from "views/Maps/Maps.jsx";
 import NotificationsPage from "views/Notifications/Notifications.jsx";
 // core components/views for Auth layout
 import LoginPage from "views/Pages/LoginPage.jsx";
 import RegisterPage from "views/Pages/RegisterPage.jsx";
+import JobDetaits from "./views/Lists/JobDetails";
 
 const dashboardRoutes = [
   {
@@ -52,6 +54,14 @@ const dashboardRoutes = [
     rtlName: "ملف تعريفي للمستخدم",
     icon: Person,
     component: WorkerProfile,
+    layout: "/admin"
+  },
+  {
+    path: "/job-details/:id",
+    name: "Job Description",
+    rtlName: "ملف تعريفي للمستخدم",
+    icon: Person,
+    component: JobDetails,
     layout: "/admin"
   },
   {

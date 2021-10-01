@@ -6,7 +6,6 @@ import { Redirect } from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
 import axios from "axios";
 
-import { getWorker } from "../../actions/items";
 // core components
 import Loader from "react-loader-spinner";
 import TextField from '@material-ui/core/TextField';
@@ -41,22 +40,20 @@ const styles = {
   }
 };
 
-const WorkerProfile = (props) => {
+const JobDetails = (props) => {
   const { classes } = props;
-  const [worker, setWorker] = React.useState("");
-  const [first_name, setFname] = React.useState("");
-  const [middle_name, setMname] = React.useState("");
-  const [last_name, setLName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [phone_number, setPNumber] = React.useState("");
+  const [title, setTitle] = React.useState("");
+  const [description, setDescription] = React.useState("");
+  const [date_added, setAddedDate] = React.useState("");
+  const [validity, setValidity] = React.useState("");
+  const [location, setLocation] = React.useState("");
+  const [preferance, setPreferance] = React.useState("");
   const [role, setRole] = React.useState("");
-  const [address, setAddress] = React.useState("");
-  const [citizenship, setCitizenship] = React.useState("");
-  const [jobs, setJobs] = React.useState("");
-  const [averageRating, setAverageRating] = React.useState("");
-  const [gender, setGender] = React.useState("");
+  const [first_name, setFname] = React.useState("");
+  const [last_name, setLname] = React.useState("");
   const [showloader, setshowloader] = useState(false);
   const [id, setId] = React.useState("");
+  const [jobs, setJobs] = React.useState("");
   const { user: currentUser } = useSelector(state => state.auth);
 
   if (!currentUser) {
@@ -66,23 +63,25 @@ const WorkerProfile = (props) => {
   useEffect(() => {
 
     const str = window.location.pathname;
-    const id = str.slice(27, 1000);
+    const id = str.slice(22, 1000);
 
-    axios.get(`/api/worker/${id}`).then(response => {
+    console.log("id", id)
+
+    axios.get(`/api/job/${id}`).then(response => {
       console.log("my data", response.data.message)
-      setWorker(response.data.message);
-      setFname(response.data.message.user.first_name)
-      setMname(response.data.message.user.middle_name)
-      setLName(response.data.message.user.last_name)
-      setEmail(response.data.message.user.email)
-      setPNumber(response.data.message.user.phone_number)
-      setRole(response.data.message.user.role_id)
-      setAddress(response.data.message.address)
-      setCitizenship(response.data.message.citizenship)
-      // setAverageRating()
-      // setJobs(response.data.message.jobs.length)
-      setGender(response.data.message.gender)
-      setId(response.data.message.user.id)
+      setJobs(response.data.message);
+      setTitle(response.data.message.title)
+      setDescription(response.data.message.description)
+      setAddedDate(response.data.message.date_added)
+      setValidity(response.data.message.validity)
+      setPreferance(response.data.message.preferance)
+      // setRole(response.data.message.user.role_id)
+      setLocation(response.data.message.location)
+      //setCitizenship(response.data.message.citizenship)
+      // setFname()
+      // setMname()
+      //setGender(response.data.message.gender)
+      setId(response.data.message.id)
     })
 
   }, []);
@@ -91,7 +90,7 @@ const WorkerProfile = (props) => {
   return (
     <div>
 
-      {worker.length === 0 || worker.isLoading ? (
+      {jobs.length === 0 || jobs.isLoading ? (
         <Loader
           type="Puff"
           color="#00BFFF"
@@ -113,189 +112,108 @@ const WorkerProfile = (props) => {
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={3}>
                     <CustomInput
-                      labelText="First Name"
+                      labelText="Title"
                       id="first_name"
                       formControlProps={{
                         fullWidth: true
                       }}
                       inputProps={{
-                        value: first_name,
-                        name: first_name,
+                        value: title,
+                        name: title,
                         type: "text",
                         onchange: event => {
                           const value = event.target.value;
-                          setFname(value)
+                          setTitle(value)
+                        }
+                      }}
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={3}>
+                    <CustomInput
+                      labelText="Date Added"
+                      id="date_added"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        value: date_added,
+                        name: date_added,
+                        type: "text",
+                        onchange: event => {
+                          const value = event.target.value;
+                          setAddedDate(value)
                         }
                       }}
                     />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={4}>
                     <CustomInput
-                      labelText="Middle Name"
+                      labelText="Valid Till"
+                      id="validity"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        value: validity,
+                        name: validity,
+                        type: "validity",
+                        onchange: event => {
+                          const value = event.target.value;
+                          setValidity(value)
+                        }
+                      }}
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={12}>
+                    <CustomInput
+                      labelText="Description"
                       id="middle_name"
                       formControlProps={{
                         fullWidth: true
                       }}
                       inputProps={{
-                        value: middle_name,
-                        name: middle_name,
+                        value: description,
+                        name: description,
                         type: "text",
                         onchange: event => {
                           const value = event.target.value;
-                          setMname(value)
+                          setDescription(value)
                         }
                       }}
                     />
                   </GridItem>
-                  <GridItem xs={12} sm={12} md={3}>
+                  <GridItem xs={12} sm={12} md={4}>
                     <CustomInput
-                      labelText="Last Name"
-                      id="last_name"
+                      labelText="Description"
+                      id="middle_name"
                       formControlProps={{
                         fullWidth: true
                       }}
                       inputProps={{
-                        value: last_name,
-                        name: last_name,
+                        value: preferance,
+                        name: preferance,
                         type: "text",
                         onchange: event => {
                           const value = event.target.value;
-                          setLName(value)
+                          setPreferance(value)
                         }
                       }}
                     />
                   </GridItem>
                   <GridItem xs={12} sm={12} md={4}>
                     <CustomInput
-                      labelText="Email address"
-                      id="email"
+                      labelText="Description"
+                      id="location"
                       formControlProps={{
                         fullWidth: true
                       }}
                       inputProps={{
-                        value: email,
-                        name: email,
-                        type: "email",
+                        value: location,
+                        name: location,
+                        type: "text",
                         onchange: event => {
                           const value = event.target.value;
-                          setEmail(value)
-                        }
-                      }}
-                    />
-                  </GridItem>
-                  <GridItem xs={12} sm={12} md={3}>
-                    <CustomInput
-                      labelText="Phone Number"
-                      id="phone_number"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        value: phone_number,
-                        name: phone_number,
-                        type: "number",
-                        onchange: event => {
-                          const value = event.target.value;
-                          setPNumber(value)
-                        }
-                      }}
-                    />
-                  </GridItem>
-                  <GridItem xs={12} sm={12} md={4}>
-                    <CustomInput
-                      labelText="Role"
-                      id="role"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        value: role,
-                        disabled: true,
-                        onchange: event => {
-                          const value = event.target.value;
-                          setRole(value)
-                        }
-                      }}
-                    />
-                  </GridItem>
-                  <GridItem xs={12} sm={12} md={4}>
-                    <CustomInput
-                      labelText="Address"
-                      id="address"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        value: address,
-                        onchange: event => {
-                          const value = event.target.value;
-                          setAddress(value)
-                        }
-                      }}
-                    />
-                  </GridItem>
-                  <GridItem xs={12} sm={12} md={4}>
-                    <CustomInput
-                      labelText="Citizenship"
-                      id="citizenship"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        value: citizenship,
-                        onchange: event => {
-                          const value = event.target.value;
-                          setCitizenship(value)
-                        }
-                      }}
-                    />
-                  </GridItem>
-                  <GridItem xs={12} sm={12} md={4}>
-                    <CustomInput
-                      labelText="Gender"
-                      id="gender"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        value: gender,
-                        onchange: event => {
-                          const value = event.target.value;
-                          setGender(value)
-                        }
-                      }}
-                    />
-                  </GridItem>
-                  <GridItem xs={12} sm={12} md={4}>
-                    <CustomInput
-                      labelText="Average Rating"
-                      id="averageRating"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        value: averageRating,
-                        disabled: true,
-                        onchange: event => {
-                          const value = event.target.value;
-                          setAverageRating(value)
-                        }
-                      }}
-                    />
-                  </GridItem>
-                  <GridItem xs={12} sm={12} md={4}>
-                    <CustomInput
-                      labelText="Jobs Done"
-                      id="jobs"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        value: jobs,
-                        disabled: true,
-                        onchange: event => {
-                          const value = event.target.value;
-                          setJobs(value)
+                          setLocation(value)
                         }
                       }}
                     />
@@ -335,6 +253,6 @@ const WorkerProfile = (props) => {
   );
 }
 
-export default withStyles(styles)(WorkerProfile);
+export default withStyles(styles)(JobDetails);
 
 

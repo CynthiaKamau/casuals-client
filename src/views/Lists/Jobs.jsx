@@ -3,6 +3,7 @@ import { connect, useSelector } from "react-redux";
 import { getJobs } from "../../actions/items";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
+import { useHistory } from "react-router-dom";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -64,11 +65,15 @@ function JobList({ data, getJobs }, props) {
 
   const {user : currentUser} = useSelector(state => state.auth);
 
-  console.log("jobs", data)
+  let history = useHistory();
 
   useEffect(() => {
     getJobs();
   }, []);
+
+  const handleClick = (id) => e => {
+    history.push(`/admin/job-details/id=${id}`);
+  }
 
   return (
     <div>
@@ -110,7 +115,7 @@ function JobList({ data, getJobs }, props) {
                             <TableCell>{list.preferance}</TableCell>
                             <TableCell>{list.rating}</TableCell>
                             <TableCell>{list.location}</TableCell>
-                            <TableCell><Button color="primary">View</Button></TableCell>
+                            <TableCell><Button color="primary" onClick={handleClick(list.id)}>View</Button></TableCell>
                         </TableRow>
                       ))}
                     </TableBody>

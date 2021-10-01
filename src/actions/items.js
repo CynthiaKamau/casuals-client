@@ -43,7 +43,6 @@ export const getClient = (id) => {
     }
 }
 
-
 //get workers
 export const getServiceProviders = () => {
     return function (dispatch, getState) {
@@ -64,7 +63,6 @@ export const getWorker = (id) => {
             .catch(error => dispatch(setError(error.error, error.status)))
     }
 }
-
 
 //get jobs
 export const getJobs = () => {

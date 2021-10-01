@@ -100,7 +100,7 @@ function serviceProvidersList({ data, getServiceProviders }, props) {
                     <Grid item xs={12} sm={10}>
                       <Card className="card" key={item.id} onClick={handleClick(item.user.id)}>
                         <CardHeader color="primary"> {item.user.first_name} {item.user.last_name} </CardHeader>
-                        <CardBody center >
+                       <CardBody center >
                           <p> {item.username}</p>
                           <p> {item.gender}</p>
                           <p> {item.phone_number}</p>
