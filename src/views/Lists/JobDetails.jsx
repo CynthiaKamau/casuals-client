@@ -103,9 +103,9 @@ const JobDetails = (props) => {
           <GridItem xs={12} sm={12} md={8}>
             <Card>
               <CardHeader color="primary">
-                <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
+                <h4 className={classes.cardTitleWhite}>Job Description</h4>
                 <p className={classes.cardCategoryWhite}>
-                  Complete your profile
+                  Job details
                 </p>
               </CardHeader>
               <CardBody>
