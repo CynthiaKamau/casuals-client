@@ -7,6 +7,8 @@ import {
     REGISTER_FAIL,
     USER_FETCH_REQUEST,
     USER_FETCHED,
+    UPDATE_USER_FAIL,
+    UPDATE_USER_SUCCESS,
     LOGOUT,
     AUTH_ERROR
 } from '../actions/types';
@@ -66,11 +68,32 @@ export const login = ({ phone_number, password }) => (dispatch) => {
         .then(res => dispatch({
             type: LOGIN_SUCCESS,
             payload: res.data
-        }))
+        }),)
         .catch(error => dispatch(setError(error.message, error.status, 'LOGIN_FAIL')),
             dispatch({ type: LOGIN_FAIL })
         );
 
+}
+
+//update profile
+export const update_profile = ({id, first_name, middle_name, last_name, phone_number, email}) => (dispatch) => {
+
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    const body = JSON.stringify({id,first_name, middle_name, last_name, phone_number, email});
+
+    axios.post('/update-profile', body, config)
+        .then(res => dispatch({
+            type: UPDATE_USER_SUCCESS,
+            payload: res.data
+        }))
+        .catch(error => dispatch(setError(error.message, error.status, 'UPDATE_USER_FAIL')),
+            dispatch({ type: UPDATE_USER_FAIL}),
+        );
 }
 
 //logout

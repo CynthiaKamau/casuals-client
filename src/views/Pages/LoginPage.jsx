@@ -65,7 +65,7 @@ class LoginPage extends React.Component {
     if (isAuthenticated === true) {
       return (
         <Redirect
-          to="/admin/jobs"
+          to="/admin/user"
         />
       );
     }

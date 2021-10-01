@@ -17,7 +17,7 @@ const App = () => {
 
   axios.defaults.baseURL = `http://${REACT_APP_SERVER_URL}`;
 
-  ReactDOM.render(
+  return (
     <Router history={hist}>
       <Switch>
         <Route path="/admin" component={Admin} />
@@ -25,10 +25,8 @@ const App = () => {
         <Route path="/rtl" component={RTL} />
         <Redirect from="/" to="/admin/dashboard" />
       </Switch>
-    </Router>,
-    document.getElementById("root")
+    </Router>
   );
-
 }
 
 export default App;

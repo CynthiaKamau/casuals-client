@@ -79,7 +79,7 @@ function clientsList({ data, getClients}, props) {
   return (
     <div>
 
-      {data.isLoading || data.items.length == 0 ? (
+      {data.isLoading || data.length == 0 ? (
         <h2> Loading... </h2>
       ): (
         <GridContainer>

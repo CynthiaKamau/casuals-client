@@ -76,7 +76,7 @@ function ServiceProvidersList({ data, getServiceProviders }, props) {
   return (
     <div>
 
-      {data.isLoading ? (
+      {data.isLoading || data.length === 0 ? (
         <h2> Loading... </h2>
       ) : (
         <GridContainer>

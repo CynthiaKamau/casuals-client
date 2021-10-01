@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { getJobs } from "../../actions/items";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -61,6 +61,9 @@ const mapDispatchToProps = dispatch => {
 function JobList({ data, getJobs }, props) {
   const { classes } = props;
 
+  const user = useSelector(state => state.auth.user);
+  console.log(user)
+
   useEffect(() => {
     getJobs();
   }, []);
@@ -68,7 +71,7 @@ function JobList({ data, getJobs }, props) {
   return (
     <div>
 
-      {data.isLoading ? (
+      {data.isLoading || data.length === 0 ? (
         <h2> Loading... </h2>
       ) : (
         <GridContainer>

@@ -56,11 +56,10 @@ export default function clientProfile(props) {
 
   }, []);
 
-
   return (
     <div>
 
-      {client.length === 0 ? (
+      {client.isLoading || client.length === 0 ? (
         <h2> Loading... </h2>
       ) : (
 
