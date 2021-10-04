@@ -58,6 +58,7 @@ const ClientProfile = (props) => {
   const [showloader, setshowloader] = useState(false);
   const [id, setId] = React.useState("");
   const { user: currentUser } = useSelector(state => state.auth);
+  const { token } = useSelector(state => state.auth);
 
   if (!currentUser) {
     return <Redirect to="/auth/login-page" />;
@@ -68,7 +69,7 @@ const ClientProfile = (props) => {
     const str = window.location.pathname;
     const id = str.slice(17, 1000);
 
-    axios.get(`/api/client/${id}`).then(response => {
+    axios.get(`/api/client/${id}`, token).then(response => {
       console.log("my data", response.data.message)
       setClient(response.data.message);
       setFname(response.data.message.user.first_name)

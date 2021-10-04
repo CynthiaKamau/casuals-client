@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import { connect, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import Grid from '@material-ui/core/Grid';
-import { getClients, getClient} from "../../actions/items";
+import { getClients, getClient } from "../../actions/items";
 
 // core components
 import { useHistory } from "react-router-dom";
@@ -47,33 +47,33 @@ const styles = {
   }
 };
 
-const mapStateToProps = state => {
-  return {
-    data: state.items
-  }
-}
+// const mapStateToProps = state => {
+//   return {
+//     items: state.items
+//   }
+// }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    getClients: () => dispatch(getClients()),
-    handleClick: (id) => {dispatch(getClient(id))}
-  }
-}
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     getClients: () => dispatch(getClients()),
+//     handleClick: (id) => {dispatch(getClient(id))}
+//   }
+// }
 
 
-function clientsList({ data, getClients}, props) {
-  const {classes} = props;
+function clientsList(props) {
+  const { classes } = props;
 
-  console.log(data);
+  let dispatch = useDispatch();
+  const { items } = useSelector(state => state.client)
 
   useEffect(() => {
-    getClients();
+    dispatch(getClients());
   }, []);
 
   let history = useHistory();
 
   const handleClick = (id) => e => {
-    console.log("here", id);
     // dispatch(getClient(id));
     history.push(`/admin/client/id=${id}`);
   }
@@ -81,23 +81,23 @@ function clientsList({ data, getClients}, props) {
   return (
     <div>
 
-      {data.length === 0 || data.isLoading ? (
+      {items.length === 0 ? (
         <Loader
           type="Puff"
           color="#00BFFF"
           height={100}
           width={100}
         />
-      ): (
+      ) : (
         <GridContainer>
           <Card plain>
             <CardHeader plain color="primary">
-              <h4 >Service Providers</h4>
+              <h4 >Clients</h4>
             </CardHeader>
 
             <CardBody style={{ display: 'flex', flexWirection: 'wrap' }}>
 
-              {data.items && data.items.length > 0 && data.items.map(item => {
+              {items && items.length > 0 && items.map(item => {
                 return (
                   <Grid container spacing={3}>
                     <Grid item xs={12} sm={10}>
@@ -128,8 +128,5 @@ function clientsList({ data, getClients}, props) {
 
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withStyles(styles)(clientsList));
+export default withStyles(styles)(clientsList);
 

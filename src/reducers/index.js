@@ -3,7 +3,9 @@ import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'
 import error from './error';
 import auth from './auth';
-import item from './item';
+import client from './client';
+import worker  from "./worker";
+import job from "./job";
 
 const persistConfig = {
     key: 'root',
@@ -14,7 +16,9 @@ const persistConfig = {
 const rootReducer = combineReducers({
     error : error,
     auth : auth,
-    items : item
+    job : job,
+    worker : worker,
+    client: client
 })
 
 export default persistReducer(persistConfig, rootReducer);

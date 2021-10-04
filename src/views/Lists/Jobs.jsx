@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { connect, useSelector } from "react-redux";
-import { getJobs } from "../../actions/items";
+import { useDispatch, useSelector} from "react-redux";
+import { getJobs, deleteJob, editJob } from "../../actions/items";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import { useHistory } from "react-router-dom";
@@ -47,38 +47,50 @@ const styles = {
   }
 };
 
-const mapStateToProps = state => {
-  return {
-    data: state.items
-  }
-}
+// const mapStateToProps = state => {
+//   return {
+//     items: state.items
+//   }
+// }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    getJobs: () => dispatch(getJobs())
-  }
-}
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     getJobs: () => dispatch(getJobs())
+//   }
+// }
 
 
-function JobList({ data, getJobs }, props) {
+function JobList(props) {
   const { classes } = props;
 
   const {user : currentUser} = useSelector(state => state.auth);
 
   let history = useHistory();
+  let dispatch = useDispatch();
+  const { items } = useSelector(state => state.job)
 
   useEffect(() => {
-    getJobs();
+    dispatch(getJobs());
   }, []);
 
-  const handleClick = (id) => e => {
+  const handleVClick = (id) => e => {
     history.push(`/admin/job-details/id=${id}`);
+  }
+
+  const handleEClick = (id) => e => {
+    history.push(`/admin/job-details/id=${id}`);
+  }
+
+  const handleDClick = (id) => e => {
+    if(window.confirm("Are you sure you want to delete the job?")) {
+      dispatch(deleteJob(id));
+    }
   }
 
   return (
     <div>
 
-      {data.isLoading || data.length === 0 ? (
+      {items.length === 0 ? (
         <Loader
           type="Puff"
           color="#00BFFF"
@@ -93,11 +105,12 @@ function JobList({ data, getJobs }, props) {
               <CardHeader color="primary">
                 <h4>Job Opportunities</h4>
                 <p>
-                  Here is a subtitle for this table
+                  Jobs available for service providers.
                 </p>
               </CardHeader>
               <CardBody>
-            
+              <div><Button color="secondary" class="pull-right"> Add Job </Button> </div>
+
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -109,13 +122,16 @@ function JobList({ data, getJobs }, props) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                      {data.items.map((list, index) => (
+                      {items && items.map((list, index) => (
                         <TableRow key={index}>
                             <TableCell>{list.title}</TableCell>
                             <TableCell>{list.preferance}</TableCell>
                             <TableCell>{list.rating}</TableCell>
                             <TableCell>{list.location}</TableCell>
-                            <TableCell><Button color="primary" onClick={handleClick(list.id)}>View</Button></TableCell>
+                            <TableCell><Button color="success" onClick={handleVClick(list.id)}>View</Button></TableCell>
+                            <TableCell><Button color="primary" onClick={handleEClick(list.id)}>Edit</Button></TableCell>
+                            <TableCell><Button color="danger" onClick={handleDClick(list.id)}>Delete</Button></TableCell>
+
                         </TableRow>
                       ))}
                     </TableBody>
@@ -132,7 +148,4 @@ function JobList({ data, getJobs }, props) {
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withStyles(styles)(JobList));
+export default withStyles(styles)(JobList);

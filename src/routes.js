@@ -21,7 +21,6 @@ import NotificationsPage from "views/Notifications/Notifications.jsx";
 // core components/views for Auth layout
 import LoginPage from "views/Pages/LoginPage.jsx";
 import RegisterPage from "views/Pages/RegisterPage.jsx";
-import JobDetaits from "./views/Lists/JobDetails";
 
 const dashboardRoutes = [
   {
