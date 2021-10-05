@@ -17,8 +17,7 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardAvatar from "components/Card/CardAvatar.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
-import { addJob } from "../../actions/items";
-
+import { editJob, getJob } from "../../actions/items";
 
 import avatar from "assets/img/faces/marc.jpg";
 
@@ -41,7 +40,7 @@ const styles = {
     }
 };
 
-const newJob = (props) => {
+const changeJob = (props) => {
 
     const { classes } = props;
     const dispatch = useDispatch();
@@ -56,22 +55,44 @@ const newJob = (props) => {
     const [rating, setRating] = React.useState("");
     const [location, setLocation] = React.useState("");
     const [showloader, setshowloader] = useState(false);
-    const [client_id, setId] = React.useState("");
+    const [id, setId] = React.useState("");
+    const [job, setJob] = React.useState("");
+    const [client_id, setClientId] = React.useState("");
     const { user: currentUser } = useSelector(state => state.auth);
-    const { error } = useSelector(state => state.job);
+    const { item, error } = useSelector(state => state.job);
+
 
     if (!currentUser) {
         return <Redirect to="/auth/login-page" />;
     }
 
+    useEffect(() => {
+
+        const str = window.location.pathname;
+        const id = str.slice(19, 1000);
+
+        dispatch(getJob(id));
+
+    }, []);
+
     var date = new Date();
 
     useEffect(() => {
-        setId(currentUser.id);
-        setStatus(true);
-        setRating('0');
-        setDate(moment(date).format('YYYY-MM-DD HH:MM:SS'));
-    }, []);
+        if (item) {
+            setJob(item);
+            setTitle(item.title)
+            setDescription(item.description)
+            setDate(item.date_added)
+            setValidity(item.validity)
+            setPreferance(item.preferance)
+            setLocation(item.location)
+            setId(item.id)
+            setClientId(item.client_id)
+            setStatus(true);
+            setRating('0');
+            setDate(moment(date).format('YYYY-MM-DD HH:MM:SS'));
+        }
+    }, [item]);
 
 
     const handleJob = e => {
@@ -81,18 +102,16 @@ const newJob = (props) => {
 
         if (title === '', description === '', date_added === '', validity === '', preferance === '', location === '') {
             setshowloader(false);
-
             swal.fire({
                 title: "Error",
                 text: "Please fill all the required fields!",
                 icon: "error",
                 dangerMode: true
             });
-
         } else {
 
-            dispatch(addJob(client_id, title, description, date_added, validity, preferance, location, rating, status))
-            if(error.length >= 1) {
+            dispatch(editJob(id, client_id, title, description, date_added, validity, preferance, location, rating, status))
+            if (item === null) {
                 setshowloader(false);
                 swal.fire({
                     title: "Error",
@@ -100,25 +119,23 @@ const newJob = (props) => {
                     icon: "error",
                     dangerMode: true
                 });
-                console.log("error", error);
             } else {
                 setshowloader(false);
                 swal.fire({
                     title: "Thank You",
-                    text: "You have successfully added a job.",
+                    text: "You have successfully updated your job.",
                     icon: "success",
                     dangerMode: true,
                     confirmButtonColor: '#3085d6',
                 })
-                .then((result) => {
-                    if(result.isConfirmed){
-                        history.push('/admin/jobs');
-                    } else {
-                        history.push('/admin/jobs');
-                    }
-                })
-            }   
-
+                    .then((result) => {
+                        if (result.isConfirmed) {
+                            history.push('/admin/jobs');
+                        } else {
+                            history.push('/admin/jobs');
+                        }
+                    })
+            }
         }
 
     };
@@ -126,7 +143,7 @@ const newJob = (props) => {
 
     return (
         <div>
-            {showloader === true ? (
+            {showloader === true || job.length === 0 ? (
                 <GridItem style={{ textAlign: "center", marginTop: 10 }}>
                     <Loader
                         type="Puff"
@@ -140,9 +157,9 @@ const newJob = (props) => {
                     <GridItem xs={12} sm={12} md={12}>
                         <Card>
                             <CardHeader color="primary">
-                                <h4 className={classes.cardTitleWhite}>Add Job</h4>
+                                <h4 className={classes.cardTitleWhite}>Edit Job</h4>
                                 <p className={classes.cardCategoryWhite}>
-                                    Create New Job
+                                    Edit Job Details
                                 </p>
                             </CardHeader>
                             <CardBody>
@@ -156,11 +173,10 @@ const newJob = (props) => {
                                             }}
                                             inputProps={{
                                                 type: "text",
-                                                required: true,
+                                                value: title,
                                                 onChange: event => {
                                                     const value = event.target.value;
                                                     setTitle(value)
-                                                    console.log("title", value)
                                                 }
                                             }}
                                         />
@@ -189,11 +205,10 @@ const newJob = (props) => {
                                             }}
                                             inputProps={{
                                                 type: "date",
-                                                required: true,
+                                                value: validity,
                                                 onChange: event => {
                                                     const value = event.target.value;
                                                     setValidity(value)
-                                                    console.log("date", value)
                                                 }
                                             }}
                                         />
@@ -207,7 +222,7 @@ const newJob = (props) => {
                                             }}
                                             inputProps={{
                                                 type: "text",
-                                                required: true,
+                                                value: preferance,
                                                 onChange: event => {
                                                     const value = event.target.value;
                                                     setPreferance(value)
@@ -223,6 +238,7 @@ const newJob = (props) => {
                                                 fullWidth: true
                                             }}
                                             inputProps={{
+                                                value: location,
                                                 onChange: event => {
                                                     const value = event.target.value;
                                                     setLocation(value)
@@ -240,6 +256,7 @@ const newJob = (props) => {
                                             inputProps={{
                                                 type: "text",
                                                 rows: "3",
+                                                value: description,
                                                 onChange: event => {
                                                     const value = event.target.value;
                                                     setDescription(value)
@@ -262,4 +279,4 @@ const newJob = (props) => {
     );
 }
 
-export default withStyles(styles)(newJob);
+export default withStyles(styles)(changeJob);

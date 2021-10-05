@@ -20,6 +20,7 @@ import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 
 import avatar from "assets/img/faces/marc.jpg";
+import { getJob } from "../../actions/items";
 
 const styles = {
   cardCategoryWhite: {
@@ -53,9 +54,10 @@ const JobDetails = (props) => {
   const [last_name, setLname] = React.useState("");
   const [showloader, setshowloader] = useState(false);
   const [id, setId] = React.useState("");
-  const [jobs, setJobs] = React.useState("");
+  const [job, setJob] = React.useState("");
   const { user: currentUser } = useSelector(state => state.auth);
-  const { token } = useSelector(state => state.auth);
+  const { item } = useSelector(state => state.job);
+  const dispatch = useDispatch();
 
   if (!currentUser) {
     return <Redirect to="/auth/login-page" />;
@@ -66,32 +68,36 @@ const JobDetails = (props) => {
     const str = window.location.pathname;
     const id = str.slice(22, 1000);
 
-    console.log("id", id)
-
-    axios.get(`/api/job/${id}`, token).then(response => {
-      console.log("my data", response.data.message)
-      setJobs(response.data.message);
-      setTitle(response.data.message.title)
-      setDescription(response.data.message.description)
-      setAddedDate(response.data.message.date_added)
-      setValidity(response.data.message.validity)
-      setPreferance(response.data.message.preferance)
-      // setRole(response.data.message.user.role_id)
-      setLocation(response.data.message.location)
-      //setCitizenship(response.data.message.citizenship)
-      // setFname()
-      // setMname()
-      //setGender(response.data.message.gender)
-      setId(response.data.message.id)
-    })
+    dispatch(getJob(id));
 
   }, []);
+
+  useEffect(() => {
+
+    if(item) {
+      console.log("my data", item);
+      setJob(item);
+      setTitle(item.title)
+      setDescription(item.description)
+      setAddedDate(item.date_added)
+      setValidity(item.validity)
+      setPreferance(item.preferance)
+      // setRole(item.client.role.name)
+      setLocation(item.location)
+      //setCitizenship(item.citizenship)
+      // setFname(item.client.first_name)
+      // setLname(item.client.last_name)
+      //setGender(item.gender)
+      setId(item.id)
+    }
+
+  }, [item]);
 
 
   return (
     <div>
 
-      {jobs.length === 0 || jobs.isLoading ? (
+      {job.length === 0 ? (
         <GridItem style={{ textAlign: "center", marginTop: 10 }}>
           <Loader
             type="Puff"

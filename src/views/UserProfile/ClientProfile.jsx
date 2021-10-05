@@ -69,7 +69,11 @@ const ClientProfile = (props) => {
     const str = window.location.pathname;
     const id = str.slice(17, 1000);
 
-    axios.get(`/api/client/${id}`, token).then(response => {
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+
+    axios.get(`/api/client/${id}`, config).then(response => {
       console.log("my data", response.data.message)
       setClient(response.data.message);
       setFname(response.data.message.user.first_name)

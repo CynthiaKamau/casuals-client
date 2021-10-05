@@ -122,7 +122,6 @@ export const getJob = (id) => {
             .catch(error => dispatch(setError(error.error, error.status, 'JOB_FAIL')),
                 dispatch({ type: JOB_FAIL })
             );
-
     }
 }
 
@@ -135,35 +134,29 @@ export const addJob = (client_id, title, description, date_added, validity, pref
     axios.post('/api/job', body, tokenConfig(getState))
         .then((res) => { 
             dispatch({ type: JOB_ADD_SUCCESS,payload: res.data})
-            return res.data;
         })
         .catch((error) => {
             dispatch(setError(error.error, error.status, 'JOB_ADD_FAIL'))
-            dispatch({ type: JOB_ADD_FAIL })
-            return error.error;
+            dispatch({ type: JOB_ADD_FAIL, payload: error.error })
         });
 
 }
 
 //edit job
-export const editJob = ({ id, title, description, date_added, validity, preferance, location, rating, status }) => (dispatch) => {
+export const editJob = (id, client_id, title, description, date_added, validity, preferance, location, rating, status) => (dispatch, getState) => {
 
-    const config = {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }
+    const body = JSON.stringify({ id, client_id, title, description, date_added, validity, preferance, location, rating, status });
+    console.log("postbody", body)
 
-    const body = JSON.stringify({ id, title, description, date_added, validity, preferance, location, rating, status });
-
-    axios.put(`/api/job/${id}`, body, config)
-        .then(res => dispatch({
-            type: JOB_EDIT_SUCCESS,
-            payload: res.data
-        }))
-        .catch(error => dispatch(setError(error.error, error.status, 'JOB_EDIT_FAIL')),
-            dispatch({ type: JOB_EDIT_FAIL }),
-        );
+    axios.put(`/api/job/${id}`, body, tokenConfig(getState))
+        .then((res) => { 
+            dispatch({ type: JOB_EDIT_SUCCESS, payload: res.data})
+        })
+        .catch((error) => {
+            dispatch(setError(error.error, error.status, 'JOB_EDIT_FAIL'))
+            dispatch({ type: JOB_EDIT_FAIL, payload: error.error })
+            console.log("edit error", error)
+        });
 
 }
 

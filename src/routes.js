@@ -16,6 +16,7 @@ import Clients from "views/Lists/Clients.jsx";
 import Jobs from "views/Lists/Jobs";
 import JobDetails from "./views/Lists/JobDetails";
 import AddJob from "./views/Forms/AddJob";
+import EditJob from "./views/Forms/EditJob";
 import Icons from "views/Icons/Icons.jsx";
 import Maps from "views/Maps/Maps.jsx";
 import NotificationsPage from "views/Notifications/Notifications.jsx";
@@ -94,6 +95,14 @@ const dashboardRoutes = [
     rtlName: "قائمة الجدول",
     icon: "content_paste",
     component: AddJob,
+    layout: "/admin"
+  },
+  {
+    path: "/edit-job/:id",
+    name: "Edit Job",
+    rtlName: "قائمة الجدول",
+    icon: "content_paste",
+    component: EditJob,
     layout: "/admin"
   },
   {

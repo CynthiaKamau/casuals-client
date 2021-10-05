@@ -14,6 +14,7 @@ import {JOBS_SUCCESS,
 const initialState = {
     items : [],
     item: [],
+    error : [],
     isLoading : false
 }
 
@@ -46,7 +47,8 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 isLoading: false,
-                items : null
+                items : null,
+                error: action.payload
             }
         case JOB_FAIL :
         case JOB_ADD_FAIL :
@@ -55,7 +57,8 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 isLoading: false,
-                item : null
+                item : null,
+                error: action.payload
             }
         
         default : return state;

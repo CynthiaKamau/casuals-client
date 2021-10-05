@@ -52,19 +52,6 @@ const styles = {
   }
 };
 
-// const mapStateToProps = state => {
-//   return {
-//     items: state.items
-//   }
-// }
-
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     getJobs: () => dispatch(getJobs())
-//   }
-// }
-
-
 function JobList(props) {
   const { classes } = props;
 
@@ -82,7 +69,7 @@ function JobList(props) {
   }
 
   const handleEClick = (id) => e => {
-    history.push(`/admin/job-details/id=${id}`);
+    history.push(`/admin/edit-job/id=${id}`);
   }
 
   const handleDClick = (id) => e => {
