@@ -16,6 +16,11 @@ import TableRow from '@material-ui/core/TableRow';import Card from "components/C
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import Loader from "react-loader-spinner";
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import ControlPointIcon from '@material-ui/icons/ControlPoint';
+import IconButton from '@material-ui/core/Button';
+
 
 const styles = {
   cardCategoryWhite: {
@@ -63,11 +68,10 @@ const styles = {
 function JobList(props) {
   const { classes } = props;
 
-  const {user : currentUser} = useSelector(state => state.auth);
-
   let history = useHistory();
   let dispatch = useDispatch();
-  const { items } = useSelector(state => state.job)
+  const { items } = useSelector(state => state.job);
+  console.log(items)
 
   useEffect(() => {
     dispatch(getJobs());
@@ -91,12 +95,14 @@ function JobList(props) {
     <div>
 
       {items.length === 0 ? (
-        <Loader
-          type="Puff"
-          color="#00BFFF"
-          height={100}
-          width={100}
-        />
+        <GridItem style={{ textAlign: "center", marginTop: 10 }}>
+          <Loader
+            type="Puff"
+            color="#00BFFF"
+            height={150}
+            width={150}
+          />
+        </GridItem>
       ) : (
         <GridContainer>
 
@@ -109,7 +115,7 @@ function JobList(props) {
                 </p>
               </CardHeader>
               <CardBody>
-              <div><Button color="secondary" class="pull-right"> Add Job </Button> </div>
+              <div class="pull-right"><Button color="primary" size="lg" block onClick={() => history.push("/admin/add-job")}> Add Job </Button> </div>
 
                 <Table>
                     <TableHead>
@@ -128,9 +134,11 @@ function JobList(props) {
                             <TableCell>{list.preferance}</TableCell>
                             <TableCell>{list.rating}</TableCell>
                             <TableCell>{list.location}</TableCell>
-                            <TableCell><Button color="success" onClick={handleVClick(list.id)}>View</Button></TableCell>
-                            <TableCell><Button color="primary" onClick={handleEClick(list.id)}>Edit</Button></TableCell>
-                            <TableCell><Button color="danger" onClick={handleDClick(list.id)}>Delete</Button></TableCell>
+                            <TableCell>
+                            <IconButton aria-label="view" color="error" onClick={handleVClick(list.id)}><ControlPointIcon /></IconButton>
+                            <IconButton aria-label="edit" color="primary" onClick={handleEClick(list.id)}><EditIcon/></IconButton>
+                            <IconButton aria-label="delete" color="secondary" onClick={handleDClick(list.id)}><DeleteIcon /></IconButton>
+                            </TableCell>
 
                         </TableRow>
                       ))}

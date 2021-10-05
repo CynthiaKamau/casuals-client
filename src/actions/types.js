@@ -29,8 +29,12 @@ export const JOB_SUCCESS = 'JOB_SUCCESS';
 export const JOB_FAIL = 'JOB_FAIL';
 export const JOB_FETCH_REQUEST = 'JOB_FETCH_REQUEST';
 
+export const JOB_ADD_SUCCESS = 'JOB_ADD_SUCCESS';
+export const JOB_ADD_FAIL = 'JOB_ADD_FAIL';
+
 export const JOB_EDIT_SUCCESS = 'JOB_EDIT_SUCCESS';
 export const JOB_EDIT_FAIL = 'JOB_EDIT_FAIL';
+
 export const JOB_DELETE_SUCCESS = 'JOB_DELETE_SUCCESS';
 export const JOB_DELETE_FAIL = 'JOB_DELETE_FAIL';
 

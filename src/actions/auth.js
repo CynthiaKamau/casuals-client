@@ -43,12 +43,12 @@ export const register = ({ first_name, middle_name, last_name, username, phone_n
 
     const body = JSON.stringify({ first_name, middle_name, last_name, username, phone_number, email, role_id, password, status });
 
-    axios.post('/client', body, config)
+    axios.post('/api/client', body, config)
         .then(res => dispatch({
             type: REGISTER_SUCCESS,
             payload: res.data
         }))
-        .catch(error => dispatch(setError(error.message, error.status, 'REGISTER_FAIL')),
+        .catch(error => dispatch(setError(error.error, error.status, 'REGISTER_FAIL')),
             dispatch({ type: REGISTER_FAIL }),
         );
 }

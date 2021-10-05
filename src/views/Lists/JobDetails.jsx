@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch, connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
 
 // @material-ui/core components
@@ -55,6 +55,7 @@ const JobDetails = (props) => {
   const [id, setId] = React.useState("");
   const [jobs, setJobs] = React.useState("");
   const { user: currentUser } = useSelector(state => state.auth);
+  const { token } = useSelector(state => state.auth);
 
   if (!currentUser) {
     return <Redirect to="/auth/login-page" />;
@@ -67,7 +68,7 @@ const JobDetails = (props) => {
 
     console.log("id", id)
 
-    axios.get(`/api/job/${id}`).then(response => {
+    axios.get(`/api/job/${id}`, token).then(response => {
       console.log("my data", response.data.message)
       setJobs(response.data.message);
       setTitle(response.data.message.title)
@@ -91,12 +92,14 @@ const JobDetails = (props) => {
     <div>
 
       {jobs.length === 0 || jobs.isLoading ? (
-        <Loader
-          type="Puff"
-          color="#00BFFF"
-          height={100}
-          width={100}
-        />
+        <GridItem style={{ textAlign: "center", marginTop: 10 }}>
+          <Loader
+            type="Puff"
+            color="#00BFFF"
+            height={100}
+            width={100}
+          />
+        </GridItem>
       ) : (
 
         <GridContainer>

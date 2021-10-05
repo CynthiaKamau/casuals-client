@@ -7,7 +7,9 @@ import {JOBS_SUCCESS,
     JOB_EDIT_SUCCESS,
     JOB_EDIT_FAIL,
     JOB_DELETE_SUCCESS,
-    JOB_DELETE_FAIL } from '../actions/types';
+    JOB_DELETE_FAIL, 
+    JOB_ADD_SUCCESS,
+    JOB_ADD_FAIL} from '../actions/types';
 
 const initialState = {
     items : [],
@@ -31,6 +33,7 @@ export default function(state = initialState, action) {
                 isLoading : false
             }
         case JOB_SUCCESS :
+        case JOB_ADD_SUCCESS :
         case JOB_EDIT_SUCCESS :
         case JOB_DELETE_SUCCESS :
             return {
@@ -46,6 +49,7 @@ export default function(state = initialState, action) {
                 items : null
             }
         case JOB_FAIL :
+        case JOB_ADD_FAIL :
         case JOB_EDIT_FAIL :
         case JOB_DELETE_FAIL :
             return {
